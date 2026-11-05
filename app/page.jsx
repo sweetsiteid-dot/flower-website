@@ -5,12 +5,12 @@ import {
   Heart, Sparkles, Calendar, Clock, Music, Pause, VolumeX,
   Gift, Plus, Lock, Unlock, Edit, Trash2, X, ChevronRight, 
   RotateCcw, BookOpen, Star, Sliders, ArrowRight, 
-  Flower2, Wand2, RefreshCw, Droplets, Feather, Compass,
-  Send, Layers, Trophy, CheckCircle2
+  Flower2, Feather, Compass, Send, Layers, Trophy, CheckCircle2,
+  Smile, Flame, Droplets, Wand, Compass as CompassIcon, Sparkle
 } from 'lucide-react';
 
-// --- CANVAS INTERAKTIF KELOPAK & BUNGA AI MEKAR ---
-function AIFlowerCanvas() {
+// --- CANVAS ANIMASI KELOPAK BUNGA & MEKAR SAAT DIKLIK ---
+function PetalBloomCanvas() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function AIFlowerCanvas() {
     window.addEventListener('resize', resizeCanvas);
 
     // Partikel Kelopak Bunga Melayang
-    const petals = Array.from({ length: 35 }, () => ({
+    const petals = Array.from({ length: 30 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       size: Math.random() * 8 + 4,
@@ -39,7 +39,7 @@ function AIFlowerCanvas() {
       color: `rgba(${Math.floor(Math.random() * 60 + 200)}, ${Math.floor(Math.random() * 80 + 100)}, ${Math.floor(Math.random() * 120 + 120)}, ${Math.random() * 0.4 + 0.2})`
     }));
 
-    // Bunga AI Mekar saat Layar Diklik
+    // Bunga Mekar Saat Layar Diklik
     let clickBlooms = [];
 
     const handleCanvasClick = (e) => {
@@ -68,7 +68,7 @@ function AIFlowerCanvas() {
       ctx.restore();
     };
 
-    const drawAIBloom = (b) => {
+    const drawBloom = (b) => {
       ctx.save();
       ctx.translate(b.x, b.y);
       ctx.globalAlpha = b.opacity;
@@ -109,7 +109,7 @@ function AIFlowerCanvas() {
         } else {
           b.opacity -= 0.015;
         }
-        drawAIBloom(b);
+        drawBloom(b);
         if (b.opacity <= 0) {
           clickBlooms.splice(index, 1);
         }
@@ -140,16 +140,16 @@ export default function App() {
   const [isMounted, setIsMounted] = useState(false);
   const audioRef = useRef(null);
 
-  // Core States
+  // States Utama
   const [anniversaryDate, setAnniversaryDate] = useState('2023-02-14T00:00:00');
-  const [partnerNames, setPartnerNames] = useState({ partner1: 'Alex', partner2: 'Taylor', nickname: 'My Glowing AI Conservatory' });
+  const [partnerNames, setPartnerNames] = useState({ partner1: 'Alex', partner2: 'Taylor', nickname: 'Taman Bintang Abadi' });
   const [partnerStatus, setPartnerStatus] = useState({
-    partner1Status: 'Blooming with Joy 🌸',
-    partner2Status: 'Watering Our Garden 🌿',
-    quote: 'Di antara ribuan bintang, kamu adalah kelopak bunga buatan AI paling indah.'
+    partner1Status: 'Sedang Kangen berat 💖',
+    partner2Status: 'Merawat Bunga Kebun 🌸',
+    quote: 'Di antara ribuan bintang, kamu adalah kelopak bunga terindah di hidupku.'
   });
 
-  const [activeTab, setActiveTab] = useState('garden');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
@@ -160,28 +160,59 @@ export default function App() {
 
   const [timeTogether, setTimeTogether] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  // 1. FITUR BARU: Daily Garden Water Streak
-  const [waterStreak, setWaterStreak] = useState(12);
+  // 1. FITUR: Water Garden & EXP Level Hubungan
+  const [waterStreak, setWaterStreak] = useState(14);
+  const [gardenLevel, setGardenLevel] = useState(5);
+  const [gardenExp, setGardenExp] = useState(70);
   const [isWateredToday, setIsWateredToday] = useState(false);
 
-  // 2. FITUR BARU: AI Botanical Studio & Poem Writer
-  const aiVibes = [
-    { title: 'Rose Celestial Neon', color: 'from-pink-500 via-rose-400 to-purple-500', poem: 'Di setiap pendar cahayamu, ada kehangatan yang tak pernah padam oleh waktu.' },
-    { title: 'Starlight Crystal Lotus', color: 'from-cyan-400 via-teal-300 to-pink-400', poem: 'Tenang dan anggun, kehadiranmu seperti telaga jernih di bawah sinar rembulan.' },
-    { title: 'Golden Ether Orchid', color: 'from-amber-300 via-yellow-200 to-rose-400', poem: 'Senyumanmu adalah mentari pagi yang selalu berhasil mencairkan dinginnya hari.' },
-    { title: 'Velvet Midnight Poppy', color: 'from-indigo-400 via-purple-300 to-pink-500', poem: 'Misteri terindah yang selalu ingin aku pelajari dan cintai setiap harinya.' }
+  // 2. FITUR: Kartu Ramalan Cinta Harian (Love Fortune)
+  const loveFortunes = [
+    { title: "Kencan Penuh Manis", desc: "Hari ini adalah hari yang pas buat makan es krim bareng atau jalan-jalan santai!", tag: "Hoki Cinta 100%" },
+    { title: "Gelombang Pelukan", desc: "Pasanganmu sedang butuh pelukan hangat 10 detik ekstra hari ini.", tag: "Kasih Sayang" },
+    { title: "Kejutan Kecil", desc: "Akan ada momen ngobrol lucu yang bikin kalian berdua ketawa lepas.", tag: "Momen Spesial" },
+    { title: "Kedamaian Jiwa", desc: "Hubungan kalian sedang di fase paling stabil dan penuh kedamaian.", tag: "Harmonis" }
   ];
-  const [selectedVibe, setSelectedVibe] = useState(aiVibes[0]);
-  const [customPoemInput, setCustomPoemInput] = useState('');
+  const [activeFortune, setActiveFortune] = useState(null);
 
-  // 3. FITUR BARU: Botani Kebaikan (Gratitude Seed Jar)
-  const [botaniSeeds, setBotaniSeeds] = useState([
-    { id: 1, text: 'Terima kasih selalu sabar dengerin cerita random-ku setiap malam.', author: 'Alex', date: 'Hari Ini' },
-    { id: 2, text: 'Ingat ya, kamu itu selalu cukup dan luar biasa di mataku!', author: 'Taylor', date: 'Kemarin' }
+  // 3. FITUR: Botanical Bloom & Poem Studio
+  const flowerTypes = [
+    { name: 'Mawar Midnight', color: 'from-pink-500 via-rose-500 to-purple-600', poem: 'Di setiap pendar cahayamu, ada kehangatan yang tak pernah padam oleh waktu.' },
+    { name: 'Teratai Kristal', color: 'from-cyan-400 via-teal-300 to-pink-400', poem: 'Tenang dan anggun, kehadiranmu seperti telaga jernih di bawah sinar rembulan.' },
+    { name: 'Anggrek Emas', color: 'from-amber-300 via-yellow-200 to-rose-400', poem: 'Senyumanmu adalah mentari pagi yang selalu berhasil mencairkan dinginnya hari.' },
+    { name: 'Lily Starlight', color: 'from-indigo-400 via-purple-300 to-pink-500', poem: 'Misteri terindah yang selalu ingin aku pelajari dan cintai setiap harinya.' }
+  ];
+  const [selectedFlower, setSelectedFlower] = useState(flowerTypes[0]);
+
+  // 4. FITUR: Papan Benih Apresiasi (Gratitude Jar)
+  const [gratitudeNotes, setGratitudeNotes] = useState([
+    { id: 1, text: 'Terima kasih selalu sabar dengerin cerita random-ku setiap malam.', author: 'Alex', time: 'Hari Ini' },
+    { id: 2, text: 'Ingat ya, kamu itu selalu cukup dan paling luar biasa di mataku!', author: 'Taylor', time: 'Kemarin' }
   ]);
-  const [newSeedText, setNewSeedText] = useState('');
+  const [newNoteText, setNewNoteText] = useState('');
 
-  // 4. FITUR BARU: Romantic Time-Capsule Vault
+  // 5. FITUR: Kupon Hadiah & Bucket List
+  const [coupons, setCoupons] = useState([
+    { id: 1, title: 'Bebas Pilihan Kuliner', desc: 'Bebas pilih makanan tanpa kata "terserah". I handle the bill!', tag: 'Kuliner', status: 'Available', code: 'TREAT-VIP' },
+    { id: 2, title: 'Pelukan Hangat 5 Menit', desc: 'Berlaku kapan saja saat kamu lagi merasa capek atau butuh semangat.', tag: 'Comfort', status: 'Available', code: 'HUG-PAS' },
+    { id: 3, title: 'Boba & Snack Delivery', desc: 'Tukarkan kupon ini untuk langsung dipesankan boba favoritmu.', tag: 'Sweet', status: 'Available', code: 'BOBA-LOVE' }
+  ]);
+
+  const [bucketList, setBucketList] = useState([
+    { id: 1, title: 'Piknik di Taman Bunga Sakura / Lavender', completed: true },
+    { id: 2, title: 'Masak Makanan Favorit Berdua di Rumah', completed: true },
+    { id: 3, title: 'Stargazing Menikmati Sunrise di Puncak', completed: false },
+    { id: 4, title: 'Road Trip Spontan Tanpa Rencana', completed: false }
+  ]);
+
+  // 6. FITUR: Jejak Kenangan (Timeline)
+  const [timeline, setTimeline] = useState([
+    { id: 1, date: '15 Oktober 2022', title: 'Pertemuan Pertama', desc: 'Momen awal obrolan manis yang mengalir hangat di kafe favorit.', icon: '☕' },
+    { id: 2, date: '02 November 2022', title: 'Kencan Pertama', desc: 'Nonton bioskop dan ngobrol berdua sampai larut malam.', icon: '🌌' },
+    { id: 3, date: '14 Februari 2023', title: 'Resmi Jadian', desc: 'Mengikat janji untuk selalu saling merawat dan saling mendukung.', icon: '💍' }
+  ]);
+
+  // 7. FITUR: Kapsul Waktu Rahasia (PIN 1234)
   const [secretPasscode, setSecretPasscode] = useState('1234');
   const [inputPin, setInputPin] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -191,33 +222,15 @@ export default function App() {
 
 Jika kamu membaca tulisan ini, berarti kamu sudah membuka kapsul waktu rahasia kita.
 
-Aku mau bilang terima kasih ya sudah bertahan dan mau tumbuh bersama sejauh ini. Seperti kebun bunga buatan AI ini, kecantikan dan kebaikan hatimu selalu terasa ajaib bagi hidupku.
+Aku cuma mau bilang terima kasih ya sudah bertahan dan mau tumbuh bersama sejauh ini. Kebaikan hatimu selalu terasa ajaib bagi hidupku.
 
-Semoga web ini selalu bisa jadi tempat pulang yang manis buat kamu kapan saja kamu kangen.
+Semoga web kecil ini selalu bisa jadi tempat pulang yang manis buat kamu kapan saja kamu kangen.
 
 Dengan Cinta Abadi,
 — Pasangan Bucinmu 💕`
   );
   const [displayedText, setDisplayedText] = useState('');
   const [typewriterIndex, setTypewriterIndex] = useState(0);
-
-  // 5. FITUR BARU: Love Compass & Floral Astrology Quiz
-  const [quizScore, setQuizScore] = useState(0);
-  const [quizFinished, setQuizFinished] = useState(false);
-  const [quizIndex, setQuizIndex] = useState(0);
-
-  const floralQuestions = [
-    { q: "Apa aroma favorit saat kita santai bareng?", opts: ["Aroma Kopi / Matcha", "Aroma Lavender Hangat", "Aroma Hujan Musim Semi", "Aroma Makanan Enak"], ans: 0 },
-    { q: "Kalau kita jadi tanaman, kita cocok jadi apa?", opts: ["Bunga Rose Abadi", "Pohon Rindang Tempat Berteduh", "Bunga Matahari Ceria", "Sepasang Kaktus Kuat"], ans: 1 },
-    { q: "Momen apa yang paling bikin kebun cinta kita makin mekar?", opts: ["Ngobrol deep talk berjam-jam", "Jalan-jalan tanpa tujuan", "Nonton film sambil maskeran", "Semua momen asal sama kamu"], ans: 3 }
-  ];
-
-  // 6. Memory Path Timeline
-  const [timeline, setTimeline] = useState([
-    { id: 1, date: 'Awal Benih Tertanam', title: 'Pertemuan Pertama', desc: 'Momen awal obrolan manis yang mengalir tanpa rasa canggung.', icon: '🌱' },
-    { id: 2, date: 'Kelopak Pertama Mekar', title: 'Kencan Pertama', desc: 'Duduk berdua menikmati malam hingga lupa waktu.', icon: '🌸' },
-    { id: 3, date: 'Tumbuh Bersama', title: 'Komitmen Abadi', desc: 'Keputusan terbaik untuk saling merawat dan menjaga satu sama lain.', icon: '💍' }
-  ]);
 
   // Settings Modal State
   const [showSettings, setShowSettings] = useState(false);
@@ -237,12 +250,12 @@ Dengan Cinta Abadi,
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== 'undefined') {
-      const savedAnniversary = localStorage.getItem('ai_garden_anniversary');
+      const savedAnniversary = localStorage.getItem('botanical_anniversary');
       if (savedAnniversary) {
         setAnniversaryDate(savedAnniversary);
         setEditAnniversary(savedAnniversary.split('T')[0]);
       }
-      const savedPartners = localStorage.getItem('ai_garden_partners');
+      const savedPartners = localStorage.getItem('botanical_partners');
       if (savedPartners) {
         const parsed = JSON.parse(savedPartners);
         setPartnerNames(parsed);
@@ -272,7 +285,7 @@ Dengan Cinta Abadi,
     return () => clearInterval(interval);
   }, [anniversaryDate, isMounted]);
 
-  // Audio Handler
+  // Audio Handler (/shapeofmyheart.mp3)
   const toggleMusic = () => {
     if (!audioRef.current) return;
     if (isPlayingMusic) {
@@ -295,20 +308,28 @@ Dengan Cinta Abadi,
     if (!isWateredToday) {
       setIsWateredToday(true);
       setWaterStreak(prev => prev + 1);
-      showToast("💧 Kebun Cinta Berhasil Disiram! Streak Bertambah 🔥");
+      const newExp = gardenExp + 30;
+      if (newExp >= 100) {
+        setGardenLevel(prev => prev + 1);
+        setGardenExp(newExp - 100);
+        showToast("🎉 LEVEL UP! Kebun Cinta Naik Level! 🌸");
+      } else {
+        setGardenExp(newExp);
+        showToast("💧 Kebun Disiram! Streak Bertambah 🔥");
+      }
     } else {
       showToast("Kebun sudah disiram hari ini. Kembali besok ya! 🌸");
     }
   };
 
-  // Add Seed Gratitude Handler
-  const handleAddSeed = (e) => {
+  // Add Gratitude Note
+  const handleAddNote = (e) => {
     e.preventDefault();
-    if (!newSeedText.trim()) return;
-    const item = { id: Date.now(), text: newSeedText.trim(), author: partnerNames.partner1, date: 'Baru Saja' };
-    setBotaniSeeds([item, ...botaniSeeds]);
-    setNewSeedText('');
-    showToast("🌱 Benih Apresiasi Baru Berhasil Ditanam!");
+    if (!newNoteText.trim()) return;
+    const item = { id: Date.now(), text: newNoteText.trim(), author: partnerNames.partner1, time: 'Baru Saja' };
+    setGratitudeNotes([item, ...gratitudeNotes]);
+    setNewNoteText('');
+    showToast("🌱 Pesan Apresiasi Berhasil Ditanam!");
   };
 
   // Typewriter Secret Letter
@@ -341,24 +362,26 @@ Dengan Cinta Abadi,
     }
   };
 
+  const completedBucketCount = bucketList.filter(b => b.completed).length;
+
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-rose-300 font-sans">
         <div className="animate-pulse flex items-center gap-3">
           <Flower2 className="w-8 h-8 text-pink-400 animate-spin" />
-          <span className="font-bold text-lg">Membuka AI Botanical Garden... 🌸</span>
+          <span className="font-bold text-lg">Membuka Portal Kebun Cinta... 🌸</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-rose-950 to-slate-950 text-slate-100 font-sans relative overflow-x-hidden pb-28">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-slate-100 font-sans relative overflow-x-hidden pb-28">
       {/* Pemutar Audio shapeofmyheart.mp3 */}
       <audio ref={audioRef} src="/shapeofmyheart.mp3" loop prefetch="auto" />
 
       {/* Interactive Background Canvas */}
-      <AIFlowerCanvas />
+      <PetalBloomCanvas />
 
       {/* Floating Toast Notification */}
       {toastMessage && (
@@ -371,7 +394,7 @@ Dengan Cinta Abadi,
       {/* Navigation Top Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-slate-950/70 border-b border-rose-900/40 shadow-xl">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => handleTabChange('garden')}>
+          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => handleTabChange('dashboard')}>
             <div className="bg-gradient-to-tr from-rose-500 to-purple-600 p-2.5 rounded-2xl shadow-lg text-white">
               <Flower2 className="w-5 h-5 animate-spin-slow" />
             </div>
@@ -386,11 +409,12 @@ Dengan Cinta Abadi,
           {/* Nav Tabs Desktop */}
           <nav className="hidden md:flex items-center gap-1.5 bg-rose-950/40 p-1.5 rounded-full border border-rose-900/30">
             {[
-              { id: 'garden', label: 'Kebun Utama', icon: Flower2 },
-              { id: 'studio', label: 'AI Studio', icon: Wand2 },
-              { id: 'seeds', label: 'Benih Kebaikan', icon: Feather },
-              { id: 'timelock', label: 'Kapsul PIN', icon: Lock },
-              { id: 'compass', label: 'Love Quiz', icon: Compass }
+              { id: 'dashboard', label: 'Dashboard', icon: Layers },
+              { id: 'bloom', label: 'Bloom Studio', icon: Flower2 },
+              { id: 'gratitude', label: 'Papan Apresiasi', icon: Feather },
+              { id: 'rewards', label: 'Kupon & Goals', icon: Gift },
+              { id: 'timeline', label: 'Timeline', icon: Calendar },
+              { id: 'secret', label: 'Kapsul PIN', icon: Lock }
             ].map(tab => {
               const IconComponent = tab.icon;
               const isActive = activeTab === tab.id;
@@ -411,7 +435,7 @@ Dengan Cinta Abadi,
             })}
           </nav>
 
-          {/* Quick Buttons */}
+          {/* Quick Controls */}
           <div className="flex items-center gap-2">
             <button
               onClick={toggleMusic}
@@ -433,191 +457,245 @@ Dengan Cinta Abadi,
         </div>
       </header>
 
-      {/* Main Content Body */}
+      {/* Main Content Workspace */}
       <main className="max-w-6xl mx-auto px-4 pt-8">
 
-        {/* ================= TAB 1: KEBUN UTAMA & DAILY WATER STREAK ================= */}
-        {activeTab === 'garden' && (
-          <div className="space-y-10 animate-fadeIn">
-            {/* Hero Card */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-950/80 via-slate-900 to-purple-950/60 p-8 md:p-12 border border-rose-800/40 shadow-2xl backdrop-blur-xl">
-              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-                <div className="flex flex-col sm:flex-row items-center gap-6">
-                  {/* Avatar 1 */}
-                  <div className="flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-rose-500 to-pink-400 shadow-xl">
-                      <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-3xl font-extrabold text-rose-300">
-                        {partnerNames.partner1.charAt(0)}
-                      </div>
-                    </div>
-                    <h3 className="mt-2 font-bold text-lg text-rose-100">{partnerNames.partner1}</h3>
-                    <span className="text-xs bg-rose-950/80 border border-rose-800/40 px-3 py-1 rounded-full text-rose-300 mt-1">
-                      {partnerStatus.partner1Status}
-                    </span>
-                  </div>
-
-                  {/* Pulsing Connector */}
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center animate-pulse">
-                      <Heart className="w-6 h-6 fill-rose-400 text-rose-400" />
-                    </div>
-                    <span className="text-xs text-rose-300 mt-1 font-semibold">Tumbuh Bersama</span>
-                  </div>
-
-                  {/* Avatar 2 */}
-                  <div className="flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-purple-400 to-pink-400 shadow-xl">
-                      <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-3xl font-extrabold text-purple-300">
-                        {partnerNames.partner2.charAt(0)}
-                      </div>
-                    </div>
-                    <h3 className="mt-2 font-bold text-lg text-purple-100">{partnerNames.partner2}</h3>
-                    <span className="text-xs bg-rose-950/80 border border-rose-800/40 px-3 py-1 rounded-full text-rose-300 mt-1">
-                      {partnerStatus.partner2Status}
-                    </span>
+        {/* ================= 1. BENTO GRID DASHBOARD ================= */}
+        {activeTab === 'dashboard' && (
+          <div className="space-y-8 animate-fadeIn">
+            
+            {/* Header Couple Banner */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-950/80 via-slate-900 to-purple-950/70 p-6 md:p-10 border border-rose-800/40 shadow-2xl backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-rose-500 to-pink-400 p-1 shadow-xl">
+                  <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-2xl font-black text-rose-300">
+                    {partnerNames.partner1.charAt(0)}
                   </div>
                 </div>
-
-                {/* Daily Quote Card */}
-                <div className="bg-slate-950/60 p-5 rounded-2xl border border-rose-800/30 max-w-xs text-center md:text-right backdrop-blur-md">
-                  <span className="text-[10px] uppercase tracking-widest text-rose-400 font-bold">Catatan Kebun Cinta</span>
-                  <p className="italic text-sm text-rose-200 mt-1">"{partnerStatus.quote}"</p>
+                <div className="w-10 h-10 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center animate-pulse">
+                  <Heart className="w-5 h-5 fill-rose-400 text-rose-400" />
                 </div>
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-purple-400 to-pink-400 p-1 shadow-xl">
+                  <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-2xl font-black text-purple-300">
+                    {partnerNames.partner2.charAt(0)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center md:text-right">
+                <span className="text-[10px] uppercase tracking-widest text-rose-400 font-bold bg-rose-950 px-3 py-1 rounded-full border border-rose-800/40">
+                  Status Kebun Cinta
+                </span>
+                <h2 className="text-xl md:text-2xl font-extrabold text-slate-100 mt-2">{partnerNames.partner1} ❤️ {partnerNames.partner2}</h2>
+                <p className="text-xs text-rose-200/80 italic mt-1">"{partnerStatus.quote}"</p>
               </div>
             </div>
 
-            {/* LIVE RELATIONSHIP COUNTER */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 backdrop-blur-xl text-center shadow-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-950/60 border border-rose-800/40 text-rose-300 text-xs font-semibold mb-3">
-                <Clock className="w-4 h-4 text-rose-400" />
-                <span>Love Timer Kebun Cinta</span>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-100 mb-8">
-                Telah Bersama Memekarkan Kebun Cinta Selama:
-              </h2>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
-                {[
-                  { label: 'Hari', val: timeTogether.days },
-                  { label: 'Jam', val: timeTogether.hours },
-                  { label: 'Menit', val: timeTogether.minutes },
-                  { label: 'Detik', val: timeTogether.seconds }
-                ].map((t, idx) => (
-                  <div key={idx} className="bg-slate-950/80 border border-rose-900/30 rounded-2xl p-5 shadow-inner">
-                    <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-rose-300 via-pink-400 to-purple-400 font-mono">
-                      {t.val}
-                    </div>
-                    <div className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wider">{t.label}</div>
+            {/* BENTO GRID WORKSPACE */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* Bento 1: Live Counter */}
+              <div className="md:col-span-2 bg-slate-900/70 border border-slate-800 rounded-3xl p-6 md:p-8 backdrop-blur-xl shadow-xl flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider">
+                    <Clock className="w-4 h-4" /> Live Love Counter
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* FITUR BARU: DAILY WATER STREAK CHECK-IN */}
-            <div className="bg-gradient-to-br from-slate-900 via-rose-950/40 to-slate-900 border border-rose-900/40 rounded-3xl p-6 md:p-8 backdrop-blur-xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-4 text-center md:text-left">
-                <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center shrink-0 mx-auto">
-                  <Droplets className="w-8 h-8 animate-bounce" />
+                  <span className="text-[10px] text-slate-500">Sejak 14 Feb 2023</span>
                 </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
+                  {[
+                    { label: 'Hari', val: timeTogether.days },
+                    { label: 'Jam', val: timeTogether.hours },
+                    { label: 'Menit', val: timeTogether.minutes },
+                    { label: 'Detik', val: timeTogether.seconds }
+                  ].map((t, i) => (
+                    <div key={i} className="bg-slate-950/80 border border-rose-900/30 rounded-2xl p-4 text-center">
+                      <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-400 font-mono">
+                        {t.val}
+                      </div>
+                      <div className="text-[10px] uppercase font-bold text-slate-400 mt-1">{t.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-xs text-slate-400 text-center md:text-left mt-2">
+                  Telah bersama memekarkan kenangan indah setiap detiknya 💖
+                </div>
+              </div>
+
+              {/* Bento 2: Water Streak & EXP Level */}
+              <div className="bg-gradient-to-br from-slate-900 via-rose-950/50 to-slate-900 border border-rose-900/40 rounded-3xl p-6 backdrop-blur-xl shadow-xl flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-center md:justify-start gap-2">
-                    <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Daily Water Streak</span>
-                    <span className="text-xs bg-blue-950 text-blue-300 px-2.5 py-0.5 rounded-full border border-blue-800 font-mono font-bold">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+                      <Droplets className="w-4 h-4" /> Water Streak
+                    </span>
+                    <span className="text-xs font-mono font-bold bg-blue-950 text-blue-300 px-2.5 py-0.5 rounded-full border border-blue-800">
                       {waterStreak} Hari 🔥
                     </span>
                   </div>
-                  <h3 className="text-xl font-extrabold text-slate-100 mt-1">Siram Kebun Cinta Hari Ini</h3>
-                  <p className="text-slate-400 text-xs mt-1">Klik tombol siram tiap hari untuk menjaga kelopak bunga tetap mekar indah!</p>
+
+                  <h3 className="text-lg font-extrabold text-slate-100">Level Kebun: Lvl {gardenLevel}</h3>
+                  <div className="w-full bg-slate-950 rounded-full h-3 mt-3 overflow-hidden p-0.5 border border-slate-800">
+                    <div className="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-full transition-all duration-500" style={{ width: `${gardenExp}%` }} />
+                  </div>
+                  <span className="text-[10px] text-slate-400 mt-1 block text-right">{gardenExp} / 100 EXP</span>
+                </div>
+
+                <button
+                  onClick={handleWaterGarden}
+                  disabled={isWateredToday}
+                  className={`w-full py-3 rounded-2xl font-bold text-xs mt-6 transition flex items-center justify-center gap-2 ${
+                    isWateredToday
+                      ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                      : 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg'
+                  }`}
+                >
+                  <Droplets className="w-4 h-4" />
+                  <span>{isWateredToday ? 'Sudah Disiram ✓' : 'Siram Kebun (+30 EXP)'}</span>
+                </button>
+              </div>
+
+              {/* Bento 3: Kartu Ramalan Cinta Harian */}
+              <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 backdrop-blur-xl shadow-xl flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
+                    <Sparkle className="w-4 h-4" /> Ramalan Cinta Harian
+                  </div>
+
+                  {activeFortune ? (
+                    <div className="bg-slate-950/80 border border-amber-900/40 rounded-2xl p-4 text-center animate-scaleUp">
+                      <span className="text-[10px] uppercase font-bold text-amber-400 bg-amber-950 px-2 py-0.5 rounded-full border border-amber-800">
+                        {activeFortune.tag}
+                      </span>
+                      <h4 className="font-bold text-slate-100 mt-2 text-sm">{activeFortune.title}</h4>
+                      <p className="text-slate-300 text-xs mt-2 italic">"{activeFortune.desc}"</p>
+                    </div>
+                  ) : (
+                    <div className="text-center py-6">
+                      <p className="text-xs text-slate-400">Klik tombol di bawah untuk membuka kartu pesan kejutan harianmu!</p>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => {
+                    const rnd = loveFortunes[Math.floor(Math.random() * loveFortunes.length)];
+                    setActiveFortune(rnd);
+                    showToast("✨ Kartu Ramalan Berhasil Dibuka!");
+                  }}
+                  className="w-full py-3 bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white font-bold text-xs rounded-2xl shadow-lg mt-4 transition flex items-center justify-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Buka Kartu Harian</span>
+                </button>
+              </div>
+
+              {/* Bento 4: Quick Shortcuts */}
+              <div
+                onClick={() => handleTabChange('bloom')}
+                className="bg-slate-900/70 border border-slate-800 hover:border-rose-700/50 p-6 rounded-3xl cursor-pointer transition flex items-center justify-between group"
+              >
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-rose-400 bg-rose-950 px-2.5 py-0.5 rounded-full border border-rose-800">Studio</span>
+                  <h3 className="font-bold text-slate-100 text-base mt-2">Bloom & Poem Studio</h3>
+                  <p className="text-xs text-slate-400 mt-1">Rajik racikan bunga & puisi cinta</p>
+                </div>
+                <div className="p-3 bg-rose-500/10 rounded-2xl text-rose-400 group-hover:scale-110 transition border border-rose-500/20">
+                  <Flower2 className="w-6 h-6" />
                 </div>
               </div>
 
-              <button
-                onClick={handleWaterGarden}
-                disabled={isWateredToday}
-                className={`px-8 py-4 rounded-2xl font-bold text-sm transition transform active:scale-95 shadow-xl shrink-0 flex items-center gap-2 ${
-                  isWateredToday
-                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
-                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white'
-                }`}
+              <div
+                onClick={() => handleTabChange('secret')}
+                className="bg-slate-900/70 border border-slate-800 hover:border-purple-700/50 p-6 rounded-3xl cursor-pointer transition flex items-center justify-between group"
               >
-                <Droplets className="w-4 h-4" />
-                <span>{isWateredToday ? 'Kebun Sudah Disiram ✓' : 'Siram Kebun Sekarang'}</span>
-              </button>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-purple-400 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">Brankas</span>
+                  <h3 className="font-bold text-slate-100 text-base mt-2">Kapsul Waktu PIN</h3>
+                  <p className="text-xs text-slate-400 mt-1">Buka surat rahasia ber-PIN</p>
+                </div>
+                <div className="p-3 bg-purple-500/10 rounded-2xl text-purple-400 group-hover:scale-110 transition border border-purple-500/20">
+                  <Lock className="w-6 h-6" />
+                </div>
+              </div>
+
             </div>
           </div>
         )}
 
-        {/* ================= TAB 2: AI BOTANICAL STUDIO & POEM WRITER ================= */}
-        {activeTab === 'studio' && (
-          <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto">
+        {/* ================= 2. BLOOM & POEM STUDIO ================= */}
+        {activeTab === 'bloom' && (
+          <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto">
             <div className="bg-slate-900/70 border border-rose-900/40 p-8 rounded-3xl text-center backdrop-blur-xl shadow-2xl relative">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-rose-500 to-purple-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-rose-900/50">
-                <Wand2 className="w-8 h-8 text-white animate-pulse" />
+                <Flower2 className="w-8 h-8 text-white animate-spin-slow" />
               </div>
 
-              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-100">AI Botanical Studio & Poem Writer</h2>
-              <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto">
-                Pilih racikan bunga AI favoritmu dan biarkan sistem merajik puisi cinta romantis secara otomatis!
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-100">Botanical Bloom & Poem Studio</h2>
+              <p className="text-slate-400 text-xs md:text-sm mt-2 max-w-md mx-auto">
+                Pilih kombinasi bunga favoritmu dan nikmati karya puisi cinta romantis tersirat!
               </p>
 
-              {/* Grid Vibe Selector */}
+              {/* Flower Selector */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                {aiVibes.map((vibe, idx) => (
+                {flowerTypes.map((fl, idx) => (
                   <div
                     key={idx}
-                    onClick={() => setSelectedVibe(vibe)}
-                    className={`p-4 rounded-2xl border cursor-pointer transition-all text-center ${
-                      selectedVibe.title === vibe.title
+                    onClick={() => setSelectedFlower(fl)}
+                    className={`p-4 rounded-2xl border cursor-pointer transition text-center ${
+                      selectedFlower.name === fl.name
                         ? 'bg-rose-950/80 border-rose-500 shadow-lg scale-105'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-full mx-auto bg-gradient-to-tr ${vibe.color} p-0.5 shadow-md mb-3`}>
+                    <div className={`w-12 h-12 rounded-full mx-auto bg-gradient-to-tr ${fl.color} p-0.5 shadow-md mb-3`}>
                       <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
                         <Flower2 className="w-6 h-6 text-rose-300" />
                       </div>
                     </div>
-                    <h4 className="text-xs font-bold text-slate-200">{vibe.title}</h4>
+                    <h4 className="text-xs font-bold text-slate-200">{fl.name}</h4>
                   </div>
                 ))}
               </div>
 
-              {/* Display Generated Poem */}
-              <div className="mt-8 bg-slate-950/90 border border-rose-900/40 rounded-3xl p-8 max-w-2xl mx-auto text-center shadow-inner relative">
+              {/* Display Poem Card */}
+              <div className="mt-8 bg-slate-950/90 border border-rose-900/40 rounded-3xl p-8 max-w-xl mx-auto text-center shadow-inner relative">
                 <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800/40">
-                  AI Craft Poem Result
+                  Hasil Karya Puisi Bunga
                 </span>
-                <p className="text-rose-200 text-lg md:text-xl font-serif italic mt-6 leading-relaxed">
-                  "{selectedVibe.poem}"
+                <p className="text-rose-200 text-base md:text-lg font-serif italic mt-6 leading-relaxed">
+                  "{selectedFlower.poem}"
                 </p>
                 <div className="mt-6 pt-4 border-t border-slate-800 text-slate-500 text-xs">
-                  Dirajik khusus untuk <span className="text-rose-300 font-bold">{partnerNames.partner2}</span>
+                  Dipersembahkan untuk <span className="text-rose-300 font-bold">{partnerNames.partner2}</span>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* ================= TAB 3: BENIH KEBAIKAN (GRATITUDE JAR) ================= */}
-        {activeTab === 'seeds' && (
+        {/* ================= 3. PAPAN BENIH APRESIASI ================= */}
+        {activeTab === 'gratitude' && (
           <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto">
             <div className="bg-slate-900/60 border border-slate-800 p-6 md:p-8 rounded-3xl backdrop-blur-md">
               <div className="text-center max-w-md mx-auto mb-8">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3">
                   <Feather className="w-7 h-7" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-100">Botani Kebaikan & Apresiasi</h2>
-                <p className="text-slate-400 text-xs mt-1">Tanam ucapan rasa terima kasih dan apresiasi kecil untuk pasanganmu di sini.</p>
+                <h2 className="text-2xl font-bold text-slate-100">Papan Benih Apresiasi</h2>
+                <p className="text-slate-400 text-xs mt-1">Tanam ucapan rasa terima kasih dan apresiasi kecil harian di sini.</p>
               </div>
 
-              {/* Input Form Benih Baru */}
-              <form onSubmit={handleAddSeed} className="flex gap-3 mb-8">
+              {/* Input Form */}
+              <form onSubmit={handleAddNote} className="flex gap-3 mb-8">
                 <input
                   type="text"
                   required
                   placeholder="Tulis ucapan terima kasih / pujian kecil hari ini..."
-                  value={newSeedText}
-                  onChange={(e) => setNewSeedText(e.target.value)}
+                  value={newNoteText}
+                  onChange={(e) => setNewNoteText(e.target.value)}
                   className="flex-1 bg-slate-950 border border-slate-800 rounded-2xl px-5 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition"
                 />
                 <button
@@ -625,21 +703,21 @@ Dengan Cinta Abadi,
                   className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl text-xs shadow-lg transition flex items-center gap-2 shrink-0"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Tanam Benih</span>
+                  <span>Tanam Pesan</span>
                 </button>
               </form>
 
-              {/* Seed Cards Stack */}
+              {/* Notes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {botaniSeeds.map((seed) => (
-                  <div key={seed.id} className="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-5 hover:border-emerald-800/40 transition">
+                {gratitudeNotes.map((note) => (
+                  <div key={note.id} className="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 hover:border-emerald-800/40 transition">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-800">
-                        Dari: {seed.author}
+                        Dari: {note.author}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">{seed.date}</span>
+                      <span className="text-[10px] text-slate-500 font-mono">{note.time}</span>
                     </div>
-                    <p className="text-slate-300 text-sm italic mt-2 leading-relaxed">"{seed.text}"</p>
+                    <p className="text-slate-300 text-sm italic mt-2 leading-relaxed">"{note.text}"</p>
                   </div>
                 ))}
               </div>
@@ -647,8 +725,109 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= TAB 4: KAPSUL WAKTU RAHASIA (PIN) ================= */}
-        {activeTab === 'timelock' && (
+        {/* ================= 4. KUPON & BUCKET LIST ================= */}
+        {activeTab === 'rewards' && (
+          <div className="space-y-8 animate-fadeIn">
+            
+            {/* Vouchers Section */}
+            <div>
+              <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2 mb-4">
+                <Gift className="w-5 h-5 text-pink-400" /> Kupon Spesial Siap Tukar
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {coupons.map((c) => (
+                  <div key={c.id} className="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-[10px] uppercase font-bold text-pink-400 bg-pink-950 px-2 py-0.5 rounded-full border border-pink-800">{c.tag}</span>
+                        <span className="text-xs font-mono text-slate-500">{c.code}</span>
+                      </div>
+                      <h4 className="font-bold text-slate-100 text-base">{c.title}</h4>
+                      <p className="text-slate-400 text-xs mt-1">{c.desc}</p>
+                    </div>
+                    <button
+                      disabled={c.status !== 'Available'}
+                      onClick={() => {
+                        setCoupons(coupons.map(item => item.id === c.id ? { ...item, status: 'Redeemed' } : item));
+                        showToast("🎉 Kupon Berhasil Ditukarkan!");
+                      }}
+                      className={`w-full py-2.5 rounded-xl font-bold text-xs mt-4 transition ${
+                        c.status === 'Available' ? 'bg-pink-600 hover:bg-pink-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {c.status === 'Available' ? 'Tukarkan Kupon' : 'Sudah Terpakai ✓'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bucket List Section */}
+            <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 backdrop-blur-md">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                    <Star className="w-5 h-5 text-amber-400" /> Target Impian (Bucket List)
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">{completedBucketCount} dari {bucketList.length} impian telah terwujud</p>
+                </div>
+                <span className="text-xl font-black text-amber-400">
+                  {Math.round((completedBucketCount / bucketList.length) * 100)}%
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                {bucketList.map((b) => (
+                  <div
+                    key={b.id}
+                    onClick={() => {
+                      setBucketList(bucketList.map(item => item.id === b.id ? { ...item, completed: !item.completed } : item));
+                    }}
+                    className={`p-3.5 rounded-xl border transition cursor-pointer flex items-center justify-between ${
+                      b.completed ? 'bg-slate-950/60 border-slate-800 text-slate-500 line-through' : 'bg-slate-900 border-slate-800 text-slate-200'
+                    }`}
+                  >
+                    <span className="text-xs font-semibold">{b.title}</span>
+                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${b.completed ? 'border-amber-400 bg-amber-400/20 text-amber-400' : 'border-slate-700'}`}>
+                      {b.completed && <CheckCircle2 className="w-4 h-4" />}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ================= 5. TIMELINE KENANGAN ================= */}
+        {activeTab === 'timeline' && (
+          <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto">
+            <div className="bg-slate-900/60 border border-slate-800 p-6 md:p-8 rounded-3xl backdrop-blur-md">
+              <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2 mb-6">
+                <Calendar className="w-6 h-6 text-rose-400" />
+                Jejak Momen Kenangan
+              </h2>
+
+              <div className="relative border-l-2 border-rose-900/40 ml-4 space-y-8">
+                {timeline.map((item) => (
+                  <div key={item.id} className="relative pl-8 group">
+                    <div className="absolute -left-4 top-1 w-8 h-8 rounded-full bg-slate-950 border-2 border-rose-500 flex items-center justify-center text-sm">
+                      {item.icon}
+                    </div>
+                    <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 hover:border-rose-800/40 transition">
+                      <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">{item.date}</span>
+                      <h3 className="text-base font-bold text-slate-100 mt-1">{item.title}</h3>
+                      <p className="text-slate-400 text-xs mt-2 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================= 6. KAPSUL WAKTU RAHASIA (PIN) ================= */}
+        {activeTab === 'secret' && (
           <div className="space-y-8 animate-fadeIn max-w-xl mx-auto">
             {!isUnlocked ? (
               <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-8 backdrop-blur-xl text-center shadow-2xl space-y-6">
@@ -708,59 +887,9 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= TAB 5: LOVE COMPASS & FLORAL QUIZ ================= */}
-        {activeTab === 'compass' && (
-          <div className="space-y-8 animate-fadeIn max-w-2xl mx-auto">
-            <div className="bg-slate-900/70 border border-slate-800 p-8 rounded-3xl backdrop-blur-xl text-center shadow-2xl">
-              <div className="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center justify-center mx-auto mb-4">
-                <Compass className="w-7 h-7" />
-              </div>
-              <h2 className="text-2xl font-bold text-slate-100">Love Compass & Quiz Kebun</h2>
-              <p className="text-slate-400 text-xs mt-1 mb-8">Uji pemahaman dan tingkat kecocokan kompas cinta kalian!</p>
-
-              {!quizFinished ? (
-                <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 text-left">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-xs font-bold text-rose-400 font-mono">Soal {quizIndex + 1} dari {floralQuestions.length}</span>
-                    <span className="text-xs text-slate-500">Skor: {quizScore}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-100 mb-6">{floralQuestions[quizIndex].q}</h3>
-                  <div className="space-y-3">
-                    {floralQuestions[quizIndex].opts.map((opt, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          if (i === floralQuestions[quizIndex].ans) setQuizScore(prev => prev + 1);
-                          if (quizIndex + 1 < floralQuestions.length) setQuizIndex(prev => prev + 1);
-                          else setQuizFinished(true);
-                        }}
-                        className="w-full text-left p-4 rounded-xl bg-slate-900 hover:bg-rose-950/60 border border-slate-800 hover:border-rose-700/50 text-sm transition text-slate-200"
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-8 text-center">
-                  <Trophy className="w-16 h-16 text-amber-400 mx-auto mb-4 animate-bounce" />
-                  <h3 className="text-2xl font-bold text-slate-100 mb-2">Quiz Selesai!</h3>
-                  <p className="text-slate-400 text-sm mb-6">Skor Kecocokan: <span className="text-rose-400 font-bold text-xl">{quizScore} / {floralQuestions.length}</span></p>
-                  <button
-                    onClick={() => { setQuizIndex(0); setQuizScore(0); setQuizFinished(false); }}
-                    className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-6 py-3 rounded-2xl text-xs transition"
-                  >
-                    Ulangi Quiz
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
       </main>
 
-      {/* Global Settings Modal */}
+      {/* Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 rounded-3xl p-6 max-w-md w-full border border-slate-800 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -830,14 +959,15 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* Mobile Floating Bottom Bar */}
+      {/* Mobile Floating Bottom Navigation Bar */}
       <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 bg-slate-900/90 backdrop-blur-xl border border-rose-900/40 rounded-full p-2 shadow-2xl flex items-center justify-around">
         {[
-          { id: 'garden', icon: Flower2 },
-          { id: 'studio', icon: Wand2 },
-          { id: 'seeds', icon: Feather },
-          { id: 'timelock', icon: Lock },
-          { id: 'compass', icon: Compass }
+          { id: 'dashboard', icon: Layers },
+          { id: 'bloom', icon: Flower2 },
+          { id: 'gratitude', icon: Feather },
+          { id: 'rewards', icon: Gift },
+          { id: 'timeline', icon: Calendar },
+          { id: 'secret', icon: Lock }
         ].map((item) => {
           const IconComp = item.icon;
           const isActive = activeTab === item.id;
