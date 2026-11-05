@@ -5,11 +5,12 @@ import {
   Heart, Sparkles, Calendar, Clock, Music, VolumeX,
   Gift, Lock, Unlock, X, BookOpen, Star, Sliders,
   Flower2, Feather, Send, Disc, Mail, Droplets, Camera, ImageIcon,
-  CheckCircle2, Compass, Smile, Award, Package, Flame, Sparkle
+  CheckCircle2, Compass, Smile, Award, Package, Flame, Sparkle,
+  Bookmark, Menu, Compass as NavigationIcon
 } from 'lucide-react';
 
-// --- CANVAS ANIMASI KELOPAK & BINTANG KILAU ---
-function OrganicCanvas() {
+// --- ANIMASI PARTIKEL BINTANG & EMUN MALAM ---
+function EtherealCanvas() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -28,17 +29,17 @@ function OrganicCanvas() {
     const petals = Array.from({ length: 25 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 6 + 3,
-      speedY: Math.random() * 0.5 + 0.2,
-      speedX: Math.sin(Math.random() * Math.PI * 2) * 0.4,
+      size: Math.random() * 5 + 2,
+      speedY: Math.random() * 0.4 + 0.15,
+      speedX: Math.sin(Math.random() * Math.PI * 2) * 0.3,
       angle: Math.random() * 360,
-      spin: Math.random() * 1.5 - 0.75,
-      color: `rgba(${Math.floor(Math.random() * 50 + 205)}, ${Math.floor(Math.random() * 60 + 160)}, ${Math.floor(Math.random() * 80 + 120)}, ${Math.random() * 0.35 + 0.15})`
+      spin: Math.random() * 1.2 - 0.6,
+      color: `rgba(${Math.floor(Math.random() * 60 + 200)}, ${Math.floor(Math.random() * 50 + 150)}, ${Math.floor(Math.random() * 80 + 130)}, ${Math.random() * 0.35 + 0.15})`
     }));
 
     let sparks = [];
     const handleCanvasClick = (e) => {
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 6; i++) {
         sparks.push({
           x: e.clientX,
           y: e.clientY,
@@ -104,23 +105,20 @@ function OrganicCanvas() {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0 opacity-70" />;
 }
 
-// --- MAIN APP COMPONENT (15 FITUR SPESIAL) ---
+// --- MAIN SCRAPBOOK MAGAZINE APP ---
 export default function App() {
   const [isMounted, setIsMounted] = useState(false);
   const audioRef = useRef(null);
 
-  // Core App Data
+  // Core Data
   const [anniversaryDate, setAnniversaryDate] = useState('2023-02-14T00:00:00');
-  const [partnerNames, setPartnerNames] = useState({ partner1: 'Alex', partner2: 'Taylor', nickname: 'Jurnal Kebun Cinta' });
-  
-  // 13. Mood & Status Radar Tracker
+  const [partnerNames, setPartnerNames] = useState({ partner1: 'Alex', partner2: 'Taylor', nickname: 'Scrapbook Romance Journal' });
   const [partnerStatus, setPartnerStatus] = useState({
-    partner1Status: 'Sedang Kangen berat 💖',
-    partner2Status: 'Merawat Bunga Kebun 🌸',
+    partner1Status: 'Sedang Merindukanmu 💕',
+    partner2Status: 'Tersenyum Membaca Pesanmu 🌸',
     quote: 'Kamu adalah halaman favorit dari seluruh kisah hidup yang pernah aku tulis.'
   });
 
-  // 3. Galeri Foto Polaroid Duo
   const [couplePhotos, setCouplePhotos] = useState({
     photo1: '/photo1.jpg',
     photo2: '/photo2.jpg'
@@ -129,19 +127,20 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('hub');
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // 1. Timer Cinta Abadi
+  // 1. Timer Perjalanan Cinta
   const [timeTogether, setTimeTogether] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  // 2. Streak Siram Kebun + EXP Level
-  const [waterStreak, setWaterStreak] = useState(16);
-  const [gardenLevel, setGardenLevel] = useState(5);
-  const [gardenExp, setGardenExp] = useState(70);
+  // 2. Kebun Cinta Streak
+  const [waterStreak, setWaterStreak] = useState(17);
+  const [gardenLevel, setGardenLevel] = useState(6);
+  const [gardenExp, setGardenExp] = useState(80);
   const [isWateredToday, setIsWateredToday] = useState(false);
 
   // 4. Ramalan Cinta Harian
@@ -153,7 +152,7 @@ export default function App() {
   ];
   const [activeFortune, setActiveFortune] = useState(null);
 
-  // 5. Piringan Hitam Puisi
+  // 5. Piringan Puisi
   const poemList = [
     { title: "Mekar Senja", text: "Di antara jingga malam, senyumanmu adalah kedamaian yang selalu aku cari." },
     { title: "Embun Musim Semi", text: "Seperti tetes air di pagi hari, kehadiranmu selalu menyegarkan jiwaku." },
@@ -169,7 +168,7 @@ export default function App() {
   ]);
   const [newNoteText, setNewNoteText] = useState('');
 
-  // 7. Kupon Hadiah Bucin
+  // 7. Kupon Hadiah
   const [coupons, setCoupons] = useState([
     { id: 1, title: 'Bebas Pilih Kuliner', desc: 'Pilih restoran apa aja, aku yang pesan & bayar!', tag: 'Food', status: 'Available' },
     { id: 2, title: 'Pelukan Hangat 10 Menit', desc: 'Tukarkan kapan saja kamu butuh semangat atau merasa lelah.', tag: 'Comfort', status: 'Available' },
@@ -178,20 +177,20 @@ export default function App() {
 
   // 8. Target Impian Together (Bucket List)
   const [bucketList, setBucketList] = useState([
-    { id: 1, title: 'Piknik di Taman Bunga Sakura / Lavender', completed: true },
+    { id: 1, title: 'Piknik di Taman Bunga Lavender', completed: true },
     { id: 2, title: 'Masak Makanan Favorit Berdua di Rumah', completed: true },
     { id: 3, title: 'Stargazing Menikmati Sunrise di Puncak', completed: false },
     { id: 4, title: 'Road Trip Spontan Tanpa Rencana', completed: false }
   ]);
 
-  // 9. Jejak Kenangan Timeline
+  // 9. Timeline Kenangan
   const [timelineEvents, setTimelineEvents] = useState([
     { id: 1, date: '15 Okt 2022', title: 'Awal Kata Menyapa', desc: 'Momen manis saat kita pertama kali bertukar cerita.', icon: '☕' },
     { id: 2, date: '02 Nov 2022', title: 'Kencan Pertama Kita', desc: 'Jalan-jalan santai sambil minum boba sampai larut.', icon: '🌌' },
     { id: 3, date: '14 Feb 2023', title: 'Janji Menyatu', desc: 'Hari di mana kita memutuskan untuk berjalan bersama selamanya.', icon: '💍' }
   ]);
 
-  // 10. Amplop Surat Rahasia PIN
+  // 10. Amplop Rahasia PIN
   const [secretPasscode, setSecretPasscode] = useState('1234');
   const [inputPin, setInputPin] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -201,7 +200,7 @@ export default function App() {
 
 Jika kamu membuka amplop rahasia ini, berarti kamu sudah memasukkan PIN jadian kita.
 
-Aku cuma mau bilang terima kasih ya sudah menjadi alasan di balik senyumku setiap hari. Web romantis ini aku buat khusus untuk menyimpan kenangan indah kita berdua.
+Aku cuma mau bilang terima kasih ya sudah menjadi alasan di balik senyumku setiap hari. Web jurnal ini aku buat khusus untuk menyimpan kenangan indah kita berdua.
 
 Semoga web ini selalu bisa jadi pelukan hangat kapan saja kamu merindukanku.
 
@@ -221,7 +220,7 @@ Dengan Cinta Abadi,
   const [quizFinished, setQuizFinished] = useState(false);
   const [quizIndex, setQuizIndex] = useState(0);
 
-  // 14. Kotak Hadiah Kejutan (Virtual Unboxing)
+  // 14. Kotak Hadiah Unboxing
   const [giftBoxOpened, setGiftBoxOpened] = useState(false);
   const giftBoxRewards = [
     "🎁 Hadiah Hari Ini: 100 Tetes Kasih Sayang & Voucher Bebas Request Apa Saja!",
@@ -230,7 +229,7 @@ Dengan Cinta Abadi,
   ];
   const [currentGiftReward, setCurrentGiftReward] = useState('');
 
-  // 15. Botol Bintang Harapan (Wish Bottle)
+  // 15. Botol Bintang Harapan
   const [wishes, setWishes] = useState([
     { id: 1, wish: "Semoga kita terus saling merawat dan bahagia sampai tua bersama.", author: partnerNames.partner1 },
     { id: 2, wish: "Semua impian dan rencana road trip kita bisa terwujud tahun ini!", author: partnerNames.partner2 }
@@ -248,6 +247,7 @@ Dengan Cinta Abadi,
   // Auto Scroll ke Atas saat Ganti Tab
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
+    setMobileMenuOpen(false);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -257,12 +257,12 @@ Dengan Cinta Abadi,
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== 'undefined') {
-      const savedAnniversary = localStorage.getItem('bucin_vip_anniversary');
+      const savedAnniversary = localStorage.getItem('journal_anniversary');
       if (savedAnniversary) {
         setAnniversaryDate(savedAnniversary);
         setEditAnniversary(savedAnniversary.split('T')[0]);
       }
-      const savedPartners = localStorage.getItem('bucin_vip_partners');
+      const savedPartners = localStorage.getItem('journal_partners');
       if (savedPartners) {
         const parsed = JSON.parse(savedPartners);
         setPartnerNames(parsed);
@@ -271,7 +271,7 @@ Dengan Cinta Abadi,
     }
   }, []);
 
-  // Timer Calculation
+  // Timer Calculator
   useEffect(() => {
     if (!isMounted) return;
     const calculateTime = () => {
@@ -292,7 +292,7 @@ Dengan Cinta Abadi,
     return () => clearInterval(interval);
   }, [anniversaryDate, isMounted]);
 
-  // 11. Audio Player Handler (/shapeofmyheart.mp3)
+  // Audio Toggle
   const toggleMusic = () => {
     if (!audioRef.current) return;
     if (isPlayingMusic) {
@@ -358,28 +358,40 @@ Dengan Cinta Abadi,
     }
   };
 
-  const completedBucketCount = bucketList.filter(b => b.completed).length;
+  const navTabs = [
+    { id: 'hub', label: '1. Cover Journal', icon: BookOpen },
+    { id: 'fortune', label: '4. Ramalan Hoki', icon: Sparkle },
+    { id: 'wheel', label: '5. Piringan Puisi', icon: Disc },
+    { id: 'notes', label: '6. Papan Apresiasi', icon: Feather },
+    { id: 'coupons', label: '7. Kupon Hadiah', icon: Gift },
+    { id: 'bucket', label: '8. Target Impian', icon: Star },
+    { id: 'timeline', label: '9. Timeline Kenangan', icon: Calendar },
+    { id: 'secret', label: '10. Amplop PIN', icon: Mail },
+    { id: 'quiz', label: '12. Kuis Chemistry', icon: Compass },
+    { id: 'giftbox', label: '14. Unboxing Kado', icon: Package },
+    { id: 'wishes', label: '15. Botol Harapan', icon: Sparkles }
+  ];
 
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-rose-300 font-sans">
         <div className="animate-pulse flex items-center gap-3">
           <Flower2 className="w-8 h-8 text-pink-400 animate-spin" />
-          <span className="font-bold text-lg">Membuka 15 Fitur Kebun Cinta... 🌸</span>
+          <span className="font-bold text-lg">Membuka Scrapbook Studio Jurnal... 🌸</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-rose-950/90 to-slate-950 text-slate-100 font-serif relative overflow-x-hidden pb-32 pt-6">
-      {/* Audio Element (/shapeofmyheart.mp3) */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-rose-950/80 to-slate-950 text-slate-100 font-serif relative overflow-x-hidden pb-32">
+      {/* Audio Element */}
       <audio ref={audioRef} src="/shapeofmyheart.mp3" loop prefetch="auto" />
 
-      {/* Canvas Partikel Organik */}
-      <OrganicCanvas />
+      {/* Partikel Ethereal */}
+      <EtherealCanvas />
 
-      {/* Floating Toast Notification */}
+      {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-5 right-5 z-50 bg-rose-600/90 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce border border-rose-400/40 backdrop-blur-md font-sans">
           <Sparkles className="w-5 h-5 text-yellow-300 fill-yellow-300" />
@@ -387,53 +399,63 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* FLOATING CREST HEADER */}
-      <header className="max-w-2xl mx-auto px-4 mb-8">
-        <div className="bg-slate-900/60 border border-rose-900/40 rounded-full p-2 px-6 backdrop-blur-xl shadow-2xl flex items-center justify-between font-sans">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleTabChange('hub')}>
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-rose-600 p-0.5 shadow-md flex items-center justify-center">
-              <Heart className="w-4 h-4 fill-slate-950 text-slate-950" />
-            </div>
-            <div>
-              <h1 className="font-bold text-sm bg-gradient-to-r from-amber-200 via-rose-200 to-pink-200 bg-clip-text text-transparent">
-                {partnerNames.partner1} & {partnerNames.partner2}
-              </h1>
-              <p className="text-[9px] text-amber-300/80 tracking-widest uppercase">{partnerNames.nickname}</p>
-            </div>
-          </div>
+      {/* FLOATING TOP MUSIC & SETTINGS WIDGET (MINIMALIS UNIK) */}
+      <div className="fixed top-5 left-5 z-40 flex items-center gap-2 font-sans">
+        <button
+          onClick={toggleMusic}
+          className={`p-3 rounded-full transition shadow-2xl flex items-center gap-2 border ${
+            isPlayingMusic ? 'bg-rose-600 text-white border-rose-400 animate-pulse' : 'bg-slate-900/90 text-amber-400 border-amber-900/40'
+          }`}
+        >
+          {isPlayingMusic ? <Music className="w-4 h-4 animate-spin" /> : <VolumeX className="w-4 h-4" />}
+          <span className="text-xs font-bold hidden sm:inline">{isPlayingMusic ? 'Playing ❤️' : 'Music Off'}</span>
+        </button>
+        <button
+          onClick={() => setShowSettings(true)}
+          className="p-3 bg-slate-900/90 text-slate-300 border border-amber-900/40 rounded-full hover:bg-rose-950 transition shadow-2xl"
+        >
+          <Sliders className="w-4 h-4" />
+        </button>
+      </div>
 
-          <div className="flex items-center gap-2">
+      {/* ================= BARU: BINDER SIDEBAR BOOKMARK (DESKTOP NAV) ================= */}
+      <aside className="hidden lg:flex fixed right-0 top-1/2 -translate-y-1/2 z-40 flex-col gap-2 p-3 font-sans">
+        {navTabs.map((tab) => {
+          const IconComponent = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
             <button
-              onClick={toggleMusic}
-              className={`p-2 rounded-full transition border ${
-                isPlayingMusic ? 'bg-rose-600 text-white border-rose-400 shadow-md' : 'bg-slate-950 text-amber-400 border-amber-900/40'
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id)}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-l-2xl text-xs font-bold transition-all transform hover:-translate-x-2 border-l border-t border-b shadow-2xl ${
+                isActive
+                  ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white border-rose-400 shadow-rose-900/50 scale-105'
+                  : 'bg-slate-900/90 text-slate-400 border-amber-900/30 hover:text-amber-200 hover:bg-slate-800'
               }`}
             >
-              {isPlayingMusic ? <Music className="w-3.5 h-3.5 animate-bounce" /> : <VolumeX className="w-3.5 h-3.5" />}
+              <IconComponent className="w-4 h-4" />
+              <span>{tab.label}</span>
             </button>
-            <button
-              onClick={() => setShowSettings(true)}
-              className="p-2 bg-slate-950 text-slate-300 border border-amber-900/40 rounded-full hover:bg-rose-950 transition"
-            >
-              <Sliders className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </header>
+          );
+        })}
+      </aside>
 
-      {/* Workspace Content Main */}
-      <main className="max-w-5xl mx-auto px-4">
+      {/* WORKSPACE JOURNAL BODY */}
+      <main className="max-w-4xl mx-auto px-4 pt-20">
 
-        {/* ================= FITUR HUB & DASHBOARD (15 IN 1) ================= */}
+        {/* ================= 1. COVER JOURNAL EDITORIAL (BERUBAH TOTAL!) ================= */}
         {activeTab === 'hub' && (
-          <div className="space-y-10 animate-fadeIn font-sans">
+          <div className="space-y-12 animate-fadeIn">
             
-            {/* 3. Galeri Foto Polaroid Duo Banner */}
-            <div className="relative bg-gradient-to-br from-slate-900/90 via-rose-950/40 to-slate-900/90 border border-rose-900/30 rounded-[3rem] p-6 md:p-10 backdrop-blur-xl shadow-2xl">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex items-center justify-center gap-2 relative">
-                  <div className="bg-white p-3 pb-8 rounded-2xl shadow-2xl transform -rotate-6 hover:rotate-0 transition duration-300 border border-slate-200 w-36 md:w-40 text-center font-sans">
-                    <div className="w-full h-36 md:h-40 bg-rose-100 rounded-xl overflow-hidden relative">
+            {/* Split Screen Scrapbook Studio Hero */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-slate-900/70 border border-amber-900/30 rounded-[3rem] p-6 md:p-10 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+              
+              {/* Left Side: Overlapping Skewed Polaroid Frame */}
+              <div className="md:col-span-6 flex items-center justify-center relative py-6">
+                <div className="relative">
+                  {/* Polaroid Foto 1 */}
+                  <div className="bg-white p-3 pb-8 rounded-2xl shadow-2xl transform -rotate-12 hover:rotate-0 transition duration-500 border border-slate-200 w-40 sm:w-48 text-center font-sans">
+                    <div className="w-full h-40 sm:h-48 bg-rose-100 rounded-xl overflow-hidden relative">
                       <img
                         src={couplePhotos.photo1}
                         alt="Foto 1"
@@ -451,12 +473,9 @@ Dengan Cinta Abadi,
                     <span className="font-bold text-xs text-slate-800 mt-2 block">{partnerNames.partner1} 💕</span>
                   </div>
 
-                  <div className="w-9 h-9 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center z-10 animate-pulse">
-                    <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-                  </div>
-
-                  <div className="bg-white p-3 pb-8 rounded-2xl shadow-2xl transform rotate-6 hover:rotate-0 transition duration-300 border border-slate-200 w-36 md:w-40 text-center font-sans">
-                    <div className="w-full h-36 md:h-40 bg-pink-100 rounded-xl overflow-hidden relative">
+                  {/* Polaroid Foto 2 (Overlapping) */}
+                  <div className="absolute top-6 left-12 bg-white p-3 pb-8 rounded-2xl shadow-2xl transform rotate-12 hover:rotate-0 transition duration-500 border border-slate-200 w-40 sm:w-48 text-center font-sans z-10">
+                    <div className="w-full h-40 sm:h-48 bg-pink-100 rounded-xl overflow-hidden relative">
                       <img
                         src={couplePhotos.photo2}
                         alt="Foto 2"
@@ -474,48 +493,63 @@ Dengan Cinta Abadi,
                     <span className="font-bold text-xs text-slate-800 mt-2 block">{partnerNames.partner2} 💖</span>
                   </div>
                 </div>
+              </div>
 
-                {/* 13. Radar Mood & Status Tracker */}
-                <div className="text-center md:text-right max-w-md font-sans">
-                  <span className="text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800/40 font-bold">
-                    Romantic Scrapbook Hub
+              {/* Right Side: Editorial Journal Typography & Quote */}
+              <div className="md:col-span-6 text-center md:text-left font-sans space-y-4">
+                <span className="inline-block text-[10px] uppercase tracking-widest px-3.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800/40 font-bold">
+                  Volume Kenangan Abadi
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100 font-serif leading-tight">
+                  Kisah Kasih <br />
+                  <span className="bg-gradient-to-r from-amber-200 via-rose-300 to-pink-300 bg-clip-text text-transparent">
+                    {partnerNames.partner1} & {partnerNames.partner2}
                   </span>
-                  <h2 className="text-2xl md:text-3xl font-bold text-slate-100 mt-3 font-serif">
-                    Kisah Kasih {partnerNames.partner1} & {partnerNames.partner2}
-                  </h2>
-                  <p className="text-slate-300 text-sm mt-2 italic font-serif leading-relaxed">
-                    "{partnerStatus.quote}"
-                  </p>
+                </h2>
+                <p className="text-slate-300 text-sm italic font-serif leading-relaxed">
+                  "{partnerStatus.quote}"
+                </p>
+
+                <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                  <span className="text-xs bg-slate-950 text-rose-300 px-3 py-1 rounded-full border border-rose-900/40 font-mono">
+                    {partnerStatus.partner1Status}
+                  </span>
+                  <span className="text-xs bg-slate-950 text-amber-300 px-3 py-1 rounded-full border border-amber-900/40 font-mono">
+                    {partnerStatus.partner2Status}
+                  </span>
                 </div>
               </div>
+
             </div>
 
-            {/* 1. Timer Cinta Abadi Pods */}
-            <div className="bg-slate-900/60 border border-rose-900/30 rounded-[2.5rem] p-8 backdrop-blur-xl text-center shadow-2xl relative">
-              <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-rose-950 text-rose-300 text-xs font-bold mb-6">
-                <Clock className="w-4 h-4 text-rose-400" />
+            {/* CELESTIAL DIAL TIMER (PIRINGAN WAKTU UNIK) */}
+            <div className="bg-gradient-to-br from-slate-900/90 to-rose-950/60 border border-amber-900/30 rounded-[3rem] p-8 text-center backdrop-blur-xl shadow-2xl relative font-sans">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-950 text-amber-300 text-xs font-bold mb-8 border border-amber-800/40">
+                <Clock className="w-4 h-4 text-amber-400" />
                 <span>Timer Perjalanan Cinta</span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
                 {[
-                  { label: 'Hari', val: timeTogether.days },
-                  { label: 'Jam', val: timeTogether.hours },
-                  { label: 'Menit', val: timeTogether.minutes },
-                  { label: 'Detik', val: timeTogether.seconds }
+                  { label: 'Hari Bersama', val: timeTogether.days },
+                  { label: 'Jam Berlalu', val: timeTogether.hours },
+                  { label: 'Menit Indah', val: timeTogether.minutes },
+                  { label: 'Detik Berharga', val: timeTogether.seconds }
                 ].map((t, idx) => (
-                  <div key={idx} className="bg-gradient-to-b from-slate-950 to-rose-950/60 border border-rose-900/30 rounded-[2rem] p-5 text-center shadow-lg transform hover:scale-105 transition">
-                    <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-300 to-pink-300 font-mono">
-                      {t.val}
+                  <div key={idx} className="relative group">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-950 border-2 border-rose-900/40 group-hover:border-rose-500/60 transition-all flex flex-col items-center justify-center mx-auto shadow-inner">
+                      <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-pink-300 font-mono">
+                        {t.val}
+                      </span>
+                      <span className="text-[9px] uppercase font-bold text-slate-400 mt-1 tracking-wider">{t.label}</span>
                     </div>
-                    <div className="text-[10px] uppercase font-bold text-slate-400 mt-2 tracking-wider">{t.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* 2. Streak Siram Kebun + EXP Level */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-[2.5rem] p-6 md:p-8 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6">
+            {/* STREAK KEBUN CINTA */}
+            <div className="bg-slate-900/60 border border-slate-800 rounded-[2.5rem] p-6 md:p-8 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 font-sans">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
                   <Droplets className="w-7 h-7 animate-bounce" />
@@ -548,40 +582,10 @@ Dengan Cinta Abadi,
               </button>
             </div>
 
-            {/* GRID NAVIGASI KE-15 FITUR LAINNYA */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-              {[
-                { id: 'fortune', name: '4. Ramalan Harian', icon: Sparkle, color: 'text-amber-400' },
-                { id: 'wheel', name: '5. Piringan Puisi', icon: Disc, color: 'text-rose-400' },
-                { id: 'notes', name: '6. Papan Apresiasi', icon: Feather, color: 'text-emerald-400' },
-                { id: 'coupons', name: '7. Kupon Hadiah', icon: Gift, color: 'text-pink-400' },
-                { id: 'bucket', name: '8. Target Impian', icon: Star, color: 'text-yellow-400' },
-                { id: 'timeline', name: '9. Timeline Momen', icon: Calendar, color: 'text-purple-400' },
-                { id: 'secret', name: '10. Amplop PIN', icon: Mail, color: 'text-rose-300' },
-                { id: 'quiz', name: '12. Kuis Chemistry', icon: Compass, color: 'text-cyan-400' },
-                { id: 'giftbox', name: '14. Unboxing Kado', icon: Package, color: 'text-amber-300' },
-                { id: 'wishes', name: '15. Botol Harapan', icon: Sparkles, color: 'text-pink-300' }
-              ].map((item) => {
-                const IconComp = item.icon;
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => handleTabChange(item.id)}
-                    className="bg-slate-900/80 border border-rose-900/30 hover:border-rose-500/50 rounded-2xl p-4 cursor-pointer transition flex items-center gap-3 group"
-                  >
-                    <div className={`p-2.5 rounded-xl bg-slate-950 border border-slate-800 ${item.color} group-hover:scale-110 transition`}>
-                      <IconComp className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold text-slate-200">{item.name}</span>
-                  </div>
-                );
-              })}
-            </div>
-
           </div>
         )}
 
-        {/* ================= 4. RAMALAN CINTA HARIAN ================= */}
+        {/* ================= 4. RAMALAN HOKI ================= */}
         {activeTab === 'fortune' && (
           <div className="space-y-8 animate-fadeIn max-w-xl mx-auto font-sans">
             <div className="bg-slate-900/80 border border-amber-900/40 rounded-[2.5rem] p-8 text-center backdrop-blur-xl shadow-2xl">
@@ -742,7 +746,7 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 8. TARGET IMPIAN (BUCKET LIST) ================= */}
+        {/* ================= 8. TARGET IMPIAN ================= */}
         {activeTab === 'bucket' && (
           <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto font-sans">
             <div className="bg-slate-900/60 border border-slate-800 rounded-[2.5rem] p-6 md:p-8 backdrop-blur-md">
@@ -751,11 +755,8 @@ Dengan Cinta Abadi,
                   <h3 className="text-xl font-bold text-slate-100 flex items-center gap-2 font-serif">
                     <Star className="w-5 h-5 text-yellow-400" /> Target Impian Together
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1">{completedBucketCount} dari {bucketList.length} impian telah terwujud</p>
+                  <p className="text-xs text-slate-400 mt-1">Impian yang telah terwujud bersama</p>
                 </div>
-                <span className="text-2xl font-black text-yellow-400 font-mono">
-                  {Math.round((completedBucketCount / bucketList.length) * 100)}%
-                </span>
               </div>
 
               <div className="space-y-3">
@@ -780,7 +781,7 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 9. TIMELINE MOMEN ================= */}
+        {/* ================= 9. TIMELINE KENANGAN ================= */}
         {activeTab === 'timeline' && (
           <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto font-sans">
             <div className="bg-slate-900/60 border border-slate-800 p-6 md:p-8 rounded-[2.5rem] backdrop-blur-md">
@@ -807,7 +808,7 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 10. AMPLOP SURAT RAHASIA (PIN) ================= */}
+        {/* ================= 10. AMPLOP PIN ================= */}
         {activeTab === 'secret' && (
           <div className="space-y-8 animate-fadeIn max-w-lg mx-auto font-sans">
             {!isUnlocked ? (
@@ -868,7 +869,7 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 12. KUIS CHEMISTRY PASANGAN ================= */}
+        {/* ================= 12. KUIS CHEMISTRY ================= */}
         {activeTab === 'quiz' && (
           <div className="space-y-8 animate-fadeIn max-w-xl mx-auto font-sans">
             <div className="bg-slate-900/80 border border-rose-900/40 rounded-[2.5rem] p-8 backdrop-blur-xl text-center shadow-2xl">
@@ -918,7 +919,7 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 14. KOTAK HADIAH KEJUTAN (UNBOXING) ================= */}
+        {/* ================= 14. UNBOXING KADO ================= */}
         {activeTab === 'giftbox' && (
           <div className="space-y-8 animate-fadeIn max-w-xl mx-auto font-sans">
             <div className="bg-slate-900/80 border border-rose-900/40 rounded-[2.5rem] p-8 text-center backdrop-blur-xl shadow-2xl">
@@ -954,7 +955,7 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 15. BOTOL BINTANG HARAPAN ================= */}
+        {/* ================= 15. BOTOL HARAPAN ================= */}
         {activeTab === 'wishes' && (
           <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto font-sans">
             <div className="bg-slate-900/60 border border-slate-800 p-6 md:p-8 rounded-[2.5rem] backdrop-blur-md">
@@ -1003,13 +1004,44 @@ Dengan Cinta Abadi,
 
       </main>
 
+      {/* ================= MOBILE RADIAL BOOKMARK MENU (BEBAS DARI BAR KAKU) ================= */}
+      <div className="lg:hidden fixed bottom-6 right-6 z-50 font-sans">
+        {mobileMenuOpen && (
+          <div className="mb-4 bg-slate-900/95 border border-rose-900/40 rounded-3xl p-3 shadow-2xl backdrop-blur-xl flex flex-col gap-2 max-h-[60vh] overflow-y-auto w-48 animate-scaleUp">
+            {navTabs.map((tab) => {
+              const IconComp = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition ${
+                    isActive ? 'bg-rose-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
+                  }`}
+                >
+                  <IconComp className="w-4 h-4" />
+                  <span className="truncate">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-rose-600 to-pink-600 text-white flex items-center justify-center shadow-2xl border border-rose-400/40 transition active:scale-95"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <NavigationIcon className="w-6 h-6 animate-spin-slow" />}
+        </button>
+      </div>
+
       {/* Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 font-sans">
           <div className="bg-slate-900 rounded-3xl p-6 max-w-md w-full border border-slate-800 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
               <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-rose-400" /> Pengaturan Web Bucin
+                <Sliders className="w-5 h-5 text-rose-400" /> Pengaturan Jurnal Bucin
               </h3>
               <button onClick={() => setShowSettings(false)} className="text-slate-400 hover:text-slate-200">
                 <X className="w-5 h-5" />
@@ -1083,7 +1115,7 @@ Dengan Cinta Abadi,
                   setSecretPasscode(editPin);
                   const updatedPhotos = { photo1: editPhoto1, photo2: editPhoto2 };
                   setCouplePhotos(updatedPhotos);
-                  if (typeof window !== 'undefined') localStorage.setItem('bucin_vip_photos', JSON.stringify(updatedPhotos));
+                  if (typeof window !== 'undefined') localStorage.setItem('journal_photos', JSON.stringify(updatedPhotos));
                   setShowSettings(false);
                   showToast("✨ Pengaturan Disimpan!");
                 }}
@@ -1096,30 +1128,6 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* FLOATING BLOSSOM DOCK */}
-      <div className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 backdrop-blur-xl border border-rose-900/40 rounded-full p-1.5 px-3 shadow-2xl flex items-center gap-1 font-sans">
-        {[
-          { id: 'hub', icon: Heart },
-          { id: 'fortune', icon: Sparkle },
-          { id: 'notes', icon: Feather },
-          { id: 'coupons', icon: Gift },
-          { id: 'secret', icon: Mail }
-        ].map((item) => {
-          const IconComp = item.icon;
-          const isActive = activeTab === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleTabChange(item.id)}
-              className={`p-2.5 rounded-full transition-all relative ${
-                isActive ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-900/50 scale-110' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <IconComp className="w-4 h-4" />
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }
