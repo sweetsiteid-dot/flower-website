@@ -3,14 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Heart, Sparkles, Calendar, Clock, Music, Pause, VolumeX,
-  Gift, Plus, Lock, Unlock, Edit, Trash2, X, ChevronRight, 
-  RotateCcw, BookOpen, Star, Sliders, ArrowRight, 
-  Flower2, Feather, Compass, Send, Layers, Trophy, CheckCircle2,
-  Camera, Image as ImageIcon, Droplets, Sparkle, Disc, Mail
+  Gift, Lock, Unlock, X, RotateCcw, BookOpen, Star, Sliders,
+  Flower2, Feather, Send, Disc, Mail, Droplets, Camera, ImageIcon,
+  Sparkle, CheckCircle2, ChevronRight
 } from 'lucide-react';
 
-// --- ANIMASI PARTIKEL BINTANG & KELOPAK EMAS ---
-function GoldPetalCanvas() {
+// --- CANVAS PARTIKEL BINTANG & KELOPAK BERKILAU ---
+function OrganicCanvas() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -26,28 +25,28 @@ function GoldPetalCanvas() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const petals = Array.from({ length: 30 }, () => ({
+    const petals = Array.from({ length: 25 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       size: Math.random() * 6 + 3,
-      speedY: Math.random() * 0.6 + 0.2,
+      speedY: Math.random() * 0.5 + 0.2,
       speedX: Math.sin(Math.random() * Math.PI * 2) * 0.4,
       angle: Math.random() * 360,
-      spin: Math.random() * 2 - 1,
-      color: `rgba(${Math.floor(Math.random() * 40 + 215)}, ${Math.floor(Math.random() * 50 + 175)}, ${Math.floor(Math.random() * 80 + 100)}, ${Math.random() * 0.4 + 0.2})`
+      spin: Math.random() * 1.5 - 0.75,
+      color: `rgba(${Math.floor(Math.random() * 50 + 205)}, ${Math.floor(Math.random() * 60 + 160)}, ${Math.floor(Math.random() * 80 + 120)}, ${Math.random() * 0.35 + 0.15})`
     }));
 
-    let clickSparks = [];
+    let sparks = [];
     const handleCanvasClick = (e) => {
-      for (let i = 0; i < 8; i++) {
-        clickSparks.push({
+      for (let i = 0; i < 7; i++) {
+        sparks.push({
           x: e.clientX,
           y: e.clientY,
-          vx: (Math.random() - 0.5) * 4,
-          vy: (Math.random() - 0.5) * 4,
+          vx: (Math.random() - 0.5) * 3 shadow,
+          vy: (Math.random() - 0.5) * 3,
           size: Math.random() * 4 + 2,
           opacity: 1,
-          color: `hsl(${Math.floor(Math.random() * 40 + 330)}, 90%, 75%)`
+          color: `hsl(${Math.floor(Math.random() * 40 + 330)}, 85%, 70%)`
         });
       }
     };
@@ -76,10 +75,10 @@ function GoldPetalCanvas() {
         ctx.restore();
       });
 
-      clickSparks.forEach((s, index) => {
+      sparks.forEach((s, index) => {
         s.x += s.vx;
         s.y += s.vy;
-        s.opacity -= 0.02;
+        s.opacity -= 0.025;
 
         ctx.beginPath();
         ctx.fillStyle = s.color;
@@ -87,7 +86,7 @@ function GoldPetalCanvas() {
         ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
         ctx.fill();
 
-        if (s.opacity <= 0) clickSparks.splice(index, 1);
+        if (s.opacity <= 0) sparks.splice(index, 1);
       });
 
       animationFrameId = requestAnimationFrame(render);
@@ -105,24 +104,23 @@ function GoldPetalCanvas() {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0 opacity-70" />;
 }
 
-// --- MAIN SCRAPBOOK APP COMPONENT ---
+// --- MAIN APP COMPONENT ---
 export default function App() {
   const [isMounted, setIsMounted] = useState(false);
   const audioRef = useRef(null);
 
-  // Core Data
+  // States Utama
   const [anniversaryDate, setAnniversaryDate] = useState('2023-02-14T00:00:00');
-  const [partnerNames, setPartnerNames] = useState({ partner1: 'Alex', partner2: 'Taylor', nickname: 'Scrapbook Kenangan Abadi' });
+  const [partnerNames, setPartnerNames] = useState({ partner1: 'Alex', partner2: 'Taylor', nickname: 'Romance Journal' });
   const [partnerStatus, setPartnerStatus] = useState({
-    partner1Status: 'Sedang Merindukanmu 💕',
-    partner2Status: 'Tersenyum Membaca Pesanmu 🌸',
+    partner1Status: 'Sedang Kangen berat 💖',
+    partner2Status: 'Merawat Bunga Kebun 🌸',
     quote: 'Kamu adalah halaman favorit dari seluruh kisah hidup yang pernah aku tulis.'
   });
 
-  // 2 FOTO SPESIAL PASANGAN (Photo Slots)
   const [couplePhotos, setCouplePhotos] = useState({
-    photo1: '/photo1.jpg', // Buka folder public/ taruh foto1.jpg
-    photo2: '/photo2.jpg'  // Buka folder public/ taruh foto2.jpg
+    photo1: '/photo1.jpg',
+    photo2: '/photo2.jpg'
   });
 
   const [activeTab, setActiveTab] = useState('journal');
@@ -136,11 +134,11 @@ export default function App() {
 
   const [timeTogether, setTimeTogether] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  // Features States
-  const [waterStreak, setWaterStreak] = useState(15);
+  // Streak Siram Tanaman
+  const [waterStreak, setWaterStreak] = useState(16);
   const [isWateredToday, setIsWateredToday] = useState(false);
 
-  // Poem & Fortune Disc
+  // Piringan Puisi
   const poemList = [
     { title: "Mekar Senja", text: "Di antara jingga malam, senyumanmu adalah kedamaian yang selalu aku cari." },
     { title: "Embun Musim Semi", text: "Seperti tetes air di pagi hari, kehadiranmu selalu menyegarkan jiwaku." },
@@ -149,28 +147,28 @@ export default function App() {
   ];
   const [selectedPoem, setSelectedPoem] = useState(poemList[0]);
 
-  // Gratitude Scrap Notes
+  // Catatan Apresiasi
   const [gratitudeNotes, setGratitudeNotes] = useState([
-    { id: 1, text: 'Terima kasih selalu sabar mendengarkan keluh kesahku tanpa pernah menghakimi.', author: 'Alex', date: 'Hari Ini' },
+    { id: 1, text: 'Terima kasih selalu sabar mendengarkan cerita random-ku setiap malam.', author: 'Alex', date: 'Hari Ini' },
     { id: 2, text: 'Ingat ya, kamu adalah orang paling hebat yang pernah aku temui!', author: 'Taylor', date: 'Kemarin' }
   ]);
   const [newNoteText, setNewNoteText] = useState('');
 
-  // Timeline Stories
-  const [timelineEvents, setTimelineEvents] = useState([
-    { id: 1, date: '15 Okt 2022', title: 'Awal Kata Menyapa', desc: 'Momen canggung tapi manis saat kita pertama kali saling bertukar cerita.', tag: 'First Meeting' },
-    { id: 2, date: '02 Nov 2022', title: 'Kencan Pertama Kita', desc: 'Jalan-jalan santai sambil minum boba dan ngobrol sampai larut malam.', tag: 'First Date' },
-    { id: 3, date: '14 Feb 2023', title: 'Janji Menyatu', desc: 'Hari di mana kita memutuskan untuk berjalan bersama selamanya.', tag: 'Anniversary' }
-  ]);
-
-  // Coupons
+  // Kupon Cinta
   const [coupons, setCoupons] = useState([
-    { id: 1, title: 'Tiket Bebas Pilih Makanan', desc: 'Pilih restoran mana saja, I handle the bill & order!', tag: 'Kuliner', status: 'Available' },
+    { id: 1, title: 'Bebas Pilih Kuliner', desc: 'Pilih restoran apa aja, aku yang pesan & bayar!', tag: 'Food', status: 'Available' },
     { id: 2, title: 'Pelukan Hangat 10 Menit', desc: 'Tukarkan kapan saja kamu butuh semangat atau merasa lelah.', tag: 'Comfort', status: 'Available' },
-    { id: 3, title: 'Boba Delivery Instant', desc: 'Langsung dipesankan es boba manis favoritmu ke rumah.', tag: 'Sweet', status: 'Available' }
+    { id: 3, title: 'Boba Delivery Instant', desc: 'Langsung dipesankan es boba manis favoritmu ke rumah.', tag: 'Treat', status: 'Available' }
   ]);
 
-  // Secret Letter Envelope PIN
+  // Timeline Memory
+  const [timelineEvents, setTimelineEvents] = useState([
+    { id: 1, date: '15 Okt 2022', title: 'Awal Kata Menyapa', desc: 'Momen manis saat kita pertama kali bertukar cerita.', icon: '☕' },
+    { id: 2, date: '02 Nov 2022', title: 'Kencan Pertama Kita', desc: 'Jalan-jalan santai sambil minum boba sampai larut.', icon: '🌌' },
+    { id: 3, date: '14 Feb 2023', title: 'Janji Menyatu', desc: 'Hari di mana kita memutuskan untuk berjalan bersama selamanya.', icon: '💍' }
+  ]);
+
+  // Amplop Rahasia PIN
   const [secretPasscode, setSecretPasscode] = useState('1234');
   const [inputPin, setInputPin] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -180,7 +178,7 @@ export default function App() {
 
 Jika kamu membuka amplop rahasia ini, berarti kamu sudah memasukkan PIN jadian kita.
 
-Aku cuma mau bilang terima kasih ya sudah menjadi alasan di balik senyumku setiap hari. Album jurnal ini aku buat khusus untuk menyimpan kenangan indah kita berdua.
+Aku cuma mau bilang terima kasih ya sudah menjadi alasan di balik senyumku setiap hari. Web romantis ini aku buat khusus untuk menyimpan kenangan indah kita berdua.
 
 Semoga web ini selalu bisa jadi pelukan hangat kapan saja kamu merindukanku.
 
@@ -206,32 +204,25 @@ Dengan Cinta Abadi,
     }
   };
 
-  // Hydration Load
+  // Hydration Safety
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== 'undefined') {
-      const savedAnniversary = localStorage.getItem('scrapbook_anniversary');
+      const savedAnniversary = localStorage.getItem('organic_anniversary');
       if (savedAnniversary) {
         setAnniversaryDate(savedAnniversary);
         setEditAnniversary(savedAnniversary.split('T')[0]);
       }
-      const savedPartners = localStorage.getItem('scrapbook_partners');
+      const savedPartners = localStorage.getItem('organic_partners');
       if (savedPartners) {
         const parsed = JSON.parse(savedPartners);
         setPartnerNames(parsed);
         setEditNames(parsed);
       }
-      const savedPhotos = localStorage.getItem('scrapbook_photos');
-      if (savedPhotos) {
-        const parsed = JSON.parse(savedPhotos);
-        setCouplePhotos(parsed);
-        setEditPhoto1(parsed.photo1);
-        setEditPhoto2(parsed.photo2);
-      }
     }
   }, []);
 
-  // Timer Calculation
+  // Timer Calculator
   useEffect(() => {
     if (!isMounted) return;
     const calculateTime = () => {
@@ -252,7 +243,7 @@ Dengan Cinta Abadi,
     return () => clearInterval(interval);
   }, [anniversaryDate, isMounted]);
 
-  // Audio Toggle
+  // Audio Toggle (/shapeofmyheart.mp3)
   const toggleMusic = () => {
     if (!audioRef.current) return;
     if (isPlayingMusic) {
@@ -270,14 +261,13 @@ Dengan Cinta Abadi,
     }
   };
 
-  // Water Streak
   const handleWaterGarden = () => {
     if (!isWateredToday) {
       setIsWateredToday(true);
       setWaterStreak(prev => prev + 1);
-      showToast("💧 Tanaman Kebun Berhasil Disiram! Streak Bertambah 🔥");
+      showToast("💧 Tanaman Kebun Disiram! Streak Bertambah 🔥");
     } else {
-      showToast("Kebun sudah disiram hari ini. Kembali besok ya! 🌸");
+      showToast("Tanaman sudah disiram hari ini. Kembali besok ya! 🌸");
     }
   };
 
@@ -316,19 +306,19 @@ Dengan Cinta Abadi,
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-rose-300 font-sans">
         <div className="animate-pulse flex items-center gap-3">
           <Flower2 className="w-8 h-8 text-pink-400 animate-spin" />
-          <span className="font-bold text-lg">Membuka Scrapbook Romance Journal... 🌸</span>
+          <span className="font-bold text-lg">Membuka Portal Cinta Organik... 🌸</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-rose-950 to-slate-950 text-slate-100 font-serif relative overflow-x-hidden pb-28">
-      {/* Audio Element (/shapeofmyheart.mp3) */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-rose-950/90 to-slate-950 text-slate-100 font-serif relative overflow-x-hidden pb-32 pt-6">
+      {/* Audio Element */}
       <audio ref={audioRef} src="/shapeofmyheart.mp3" loop prefetch="auto" />
 
-      {/* Gold Particles Canvas */}
-      <GoldPetalCanvas />
+      {/* Canvas Partikel Organik */}
+      <OrganicCanvas />
 
       {/* Floating Toast Notification */}
       {toastMessage && (
@@ -338,91 +328,60 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* Top Floating Scrapbook Bar */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-slate-950/80 border-b border-amber-900/40 shadow-2xl">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      {/* ================= BARU: FLOATING CREST HEADER (BUKAN BAR KAKU ATAS) ================= */}
+      <header className="max-w-xl mx-auto px-4 mb-8">
+        <div className="bg-slate-900/60 border border-rose-900/40 rounded-full p-2 px-6 backdrop-blur-xl shadow-2xl flex items-center justify-between font-sans">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleTabChange('journal')}>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-rose-600 p-0.5 shadow-lg flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-slate-950" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-rose-600 p-0.5 shadow-md flex items-center justify-center">
+              <Heart className="w-4 h-4 fill-slate-950 text-slate-950" />
             </div>
             <div>
-              <h1 className="font-bold text-base md:text-lg bg-gradient-to-r from-amber-200 via-rose-200 to-pink-200 bg-clip-text text-transparent">
+              <h1 className="font-bold text-sm bg-gradient-to-r from-amber-200 via-rose-200 to-pink-200 bg-clip-text text-transparent">
                 {partnerNames.partner1} & {partnerNames.partner2}
               </h1>
-              <p className="text-[10px] text-amber-300/80 font-sans tracking-widest uppercase">{partnerNames.nickname}</p>
+              <p className="text-[9px] text-amber-300/80 tracking-widest uppercase">{partnerNames.nickname}</p>
             </div>
           </div>
 
-          {/* Nav Tabs */}
-          <nav className="hidden md:flex items-center gap-2 bg-slate-900/60 p-1.5 rounded-full border border-amber-900/30 font-sans">
-            {[
-              { id: 'journal', label: 'Scrapbook', icon: BookOpen },
-              { id: 'photos', label: 'Galeri Foto', icon: Camera },
-              { id: 'wheel', label: 'Piringan Puisi', icon: Disc },
-              { id: 'notes', label: 'Catatan Tempel', icon: Feather },
-              { id: 'coupons', label: 'Kupon Cinta', icon: Gift },
-              { id: 'secret', label: 'Amplop PIN', icon: Mail }
-            ].map(tab => {
-              const IconComponent = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTabChange(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                    isActive
-                      ? 'bg-gradient-to-r from-amber-600 to-rose-600 text-white shadow-lg shadow-amber-900/40'
-                      : 'text-slate-400 hover:text-amber-200 hover:bg-slate-800'
-                  }`}
-                >
-                  <IconComponent className="w-3.5 h-3.5" />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Music & Settings */}
           <div className="flex items-center gap-2">
             <button
               onClick={toggleMusic}
-              className={`p-2.5 rounded-full transition-all flex items-center justify-center border ${
-                isPlayingMusic
-                  ? 'bg-rose-600 text-white border-rose-400 shadow-lg shadow-rose-600/40'
-                  : 'bg-slate-900/80 text-amber-400 border-amber-900/40 hover:bg-rose-950'
+              className={`p-2 rounded-full transition border ${
+                isPlayingMusic ? 'bg-rose-600 text-white border-rose-400 shadow-md' : 'bg-slate-950 text-amber-400 border-amber-900/40'
               }`}
             >
-              {isPlayingMusic ? <Music className="w-4 h-4 animate-bounce" /> : <VolumeX className="w-4 h-4" />}
+              {isPlayingMusic ? <Music className="w-3.5 h-3.5 animate-bounce" /> : <VolumeX className="w-3.5 h-3.5" />}
             </button>
             <button
               onClick={() => setShowSettings(true)}
-              className="p-2.5 bg-slate-900/80 text-slate-300 border border-amber-900/40 rounded-full hover:bg-rose-950 transition-all"
+              className="p-2 bg-slate-950 text-slate-300 border border-amber-900/40 rounded-full hover:bg-rose-950 transition"
             >
-              <Sliders className="w-4 h-4" />
+              <Sliders className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
       </header>
 
-      {/* Workspace Body */}
-      <main className="max-w-6xl mx-auto px-4 pt-8">
+      {/* Workspace Content Main */}
+      <main className="max-w-5xl mx-auto px-4">
 
-        {/* ================= 1. POLAROID SCRAPBOOK JOURNAL ================= */}
+        {/* ================= 1. ORGANIC SCRAPBOOK JOURNAL ================= */}
         {activeTab === 'journal' && (
           <div className="space-y-12 animate-fadeIn">
             
-            {/* Scrapbook Banner Header dengan 2 Foto Polaroid */}
-            <div className="relative bg-slate-900/80 border border-amber-900/40 rounded-3xl p-6 md:p-10 backdrop-blur-xl shadow-2xl overflow-hidden">
+            {/* Organic Hero Banner dengan Foto Polaroid Berputar */}
+            <div className="relative bg-gradient-to-br from-slate-900/90 via-rose-950/40 to-slate-900/90 border border-rose-900/30 rounded-[3rem] p-6 md:p-10 backdrop-blur-xl shadow-2xl">
+              
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                 
-                {/* Dual Polaroid Frames */}
-                <div className="flex items-center justify-center gap-4 relative">
-                  {/* Polaroid Foto 1 */}
-                  <div className="bg-white p-3 pt-3 pb-8 rounded-xl shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-300 border border-slate-200 w-36 md:w-44 text-center">
-                    <div className="w-full h-36 md:h-44 bg-rose-100 rounded-lg overflow-hidden relative">
+                {/* 2 Polaroid Photos Overlapping */}
+                <div className="flex items-center justify-center gap-2 relative">
+                  {/* Foto 1 (Miring Kiri) */}
+                  <div className="bg-white p-3 pb-8 rounded-2xl shadow-2xl transform -rotate-6 hover:rotate-0 transition duration-300 border border-slate-200 w-36 md:w-40 text-center font-sans">
+                    <div className="w-full h-36 md:h-40 bg-rose-100 rounded-xl overflow-hidden relative">
                       <img
                         src={couplePhotos.photo1}
-                        alt="Foto Pasangan 1"
+                        alt="Foto 1"
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.style.display = 'none';
@@ -431,23 +390,23 @@ Dengan Cinta Abadi,
                       />
                       <div className="hidden absolute inset-0 bg-slate-900 flex-col items-center justify-center text-slate-400 text-xs p-2">
                         <ImageIcon className="w-8 h-8 mb-1 text-rose-400" />
-                        <span>Foto 1 Kamu</span>
+                        <span>Foto Kamu</span>
                       </div>
                     </div>
-                    <span className="font-sans font-bold text-xs text-slate-800 mt-2 block">{partnerNames.partner1} 💕</span>
+                    <span className="font-bold text-xs text-slate-800 mt-2 block">{partnerNames.partner1} 💕</span>
                   </div>
 
-                  {/* Heart Connector Pin */}
-                  <div className="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center z-10 animate-pulse">
-                    <Heart className="w-5 h-5 fill-rose-500 text-rose-500" />
+                  {/* Icon Heart Pin Middle */}
+                  <div className="w-9 h-9 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center z-10 animate-pulse">
+                    <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
                   </div>
 
-                  {/* Polaroid Foto 2 */}
-                  <div className="bg-white p-3 pt-3 pb-8 rounded-xl shadow-2xl transform rotate-6 hover:rotate-0 transition-all duration-300 border border-slate-200 w-36 md:w-44 text-center">
-                    <div className="w-full h-36 md:h-44 bg-pink-100 rounded-lg overflow-hidden relative">
+                  {/* Foto 2 (Miring Kanan) */}
+                  <div className="bg-white p-3 pb-8 rounded-2xl shadow-2xl transform rotate-6 hover:rotate-0 transition duration-300 border border-slate-200 w-36 md:w-40 text-center font-sans">
+                    <div className="w-full h-36 md:h-40 bg-pink-100 rounded-xl overflow-hidden relative">
                       <img
                         src={couplePhotos.photo2}
-                        alt="Foto Pasangan 2"
+                        alt="Foto 2"
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.style.display = 'none';
@@ -456,19 +415,19 @@ Dengan Cinta Abadi,
                       />
                       <div className="hidden absolute inset-0 bg-slate-900 flex-col items-center justify-center text-slate-400 text-xs p-2">
                         <ImageIcon className="w-8 h-8 mb-1 text-pink-400" />
-                        <span>Foto 2 Doi</span>
+                        <span>Foto Doi</span>
                       </div>
                     </div>
-                    <span className="font-sans font-bold text-xs text-slate-800 mt-2 block">{partnerNames.partner2} 💖</span>
+                    <span className="font-bold text-xs text-slate-800 mt-2 block">{partnerNames.partner2} 💖</span>
                   </div>
                 </div>
 
-                {/* Scrapbook Journal Info */}
+                {/* Scrapbook Text */}
                 <div className="text-center md:text-right max-w-md font-sans">
-                  <span className="text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800/40 font-bold">
-                    Romantic Storybook
+                  <span className="text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800/40 font-bold">
+                    Romantic Scrapbook
                   </span>
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-slate-100 mt-3 font-serif">
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-100 mt-3 font-serif">
                     Kisah Kasih {partnerNames.partner1} & {partnerNames.partner2}
                   </h2>
                   <p className="text-slate-300 text-sm mt-2 italic font-serif leading-relaxed">
@@ -478,52 +437,53 @@ Dengan Cinta Abadi,
               </div>
             </div>
 
-            {/* LIVE TIMER STICKY NOTE */}
-            <div className="bg-amber-100/10 border border-amber-500/30 rounded-3xl p-8 backdrop-blur-xl text-center shadow-2xl relative font-sans">
-              <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-950 text-amber-300 text-xs font-bold mb-4">
-                <Clock className="w-4 h-4 text-amber-400" />
-                <span>Timer Perjalanan Hubungan</span>
+            {/* ORGANIC TIMER PODS (TIDAK KAKU KOTAK LAGI) */}
+            <div className="bg-slate-900/60 border border-rose-900/30 rounded-[2.5rem] p-8 backdrop-blur-xl text-center shadow-2xl font-sans relative">
+              <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-rose-950 text-rose-300 text-xs font-bold mb-6">
+                <Clock className="w-4 h-4 text-rose-400" />
+                <span>Timer Perjalanan Cinta</span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+              {/* Timer berbentuk Lingkaran Kelopak Soft */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
                 {[
                   { label: 'Hari', val: timeTogether.days },
                   { label: 'Jam', val: timeTogether.hours },
                   { label: 'Menit', val: timeTogether.minutes },
                   { label: 'Detik', val: timeTogether.seconds }
                 ].map((t, idx) => (
-                  <div key={idx} className="bg-slate-950/80 border border-amber-900/40 rounded-2xl p-5 shadow-inner">
-                    <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-300 to-pink-300 font-mono">
+                  <div key={idx} className="bg-gradient-to-b from-slate-950 to-rose-950/60 border border-rose-900/30 rounded-[2rem] p-5 text-center shadow-lg transform hover:scale-105 transition">
+                    <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-300 to-pink-300 font-mono">
                       {t.val}
                     </div>
-                    <div className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wider">{t.label}</div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400 mt-2 tracking-wider">{t.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* VISUAL PLANT WATERING STREAK */}
-            <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 md:p-8 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 font-sans">
+            {/* TANAMAN SIRAM STREAK ORGANIK */}
+            <div className="bg-slate-900/60 border border-slate-800 rounded-[2.5rem] p-6 md:p-8 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 font-sans">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
-                  <Droplets className="w-8 h-8 animate-bounce" />
+                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+                  <Droplets className="w-7 h-7 animate-bounce" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Visual Plant Growth</span>
+                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Streak Tanaman Cinta</span>
                     <span className="text-xs bg-emerald-950 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-800 font-mono font-bold">
-                      {waterStreak} Hari Streak 🔥
+                      {waterStreak} Hari 🔥
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-100 mt-1">Siram Tanaman Kebun Cinta</h3>
-                  <p className="text-slate-400 text-xs mt-1">Jaga agar bunga di album kenangan ini selalu mekar setiap hari!</p>
+                  <h3 className="text-base font-bold text-slate-100 mt-1">Siram Tanaman Kebun Kita</h3>
+                  <p className="text-slate-400 text-xs mt-0.5">Jaga agar bunga di album ini selalu mekar setiap hari!</p>
                 </div>
               </div>
 
               <button
                 onClick={handleWaterGarden}
                 disabled={isWateredToday}
-                className={`px-8 py-3.5 rounded-2xl font-bold text-xs transition shadow-lg shrink-0 flex items-center gap-2 ${
+                className={`px-6 py-3.5 rounded-2xl font-bold text-xs transition shadow-lg shrink-0 flex items-center gap-2 ${
                   isWateredToday
                     ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                     : 'bg-emerald-600 hover:bg-emerald-500 text-white'
@@ -539,19 +499,18 @@ Dengan Cinta Abadi,
 
         {/* ================= 2. GALERI FOTO POLAROID ================= */}
         {activeTab === 'photos' && (
-          <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto">
-            <div className="text-center max-w-md mx-auto font-sans">
-              <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center mx-auto mb-3">
-                <Camera className="w-7 h-7" />
+          <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto font-sans">
+            <div className="text-center max-w-md mx-auto">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center mx-auto mb-3">
+                <Camera className="w-6 h-6" />
               </div>
               <h2 className="text-2xl font-bold text-slate-100 font-serif">Galeri Foto Kenangan</h2>
               <p className="text-slate-400 text-xs mt-1">Abadikan foto-foto indah berdua di sini!</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
-              {/* Foto 1 Card */}
-              <div className="bg-white p-4 pt-4 pb-10 rounded-2xl shadow-2xl border border-slate-200 transform -rotate-2 hover:rotate-0 transition duration-300 font-sans">
-                <div className="w-full h-64 bg-slate-900 rounded-xl overflow-hidden relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-2">
+              <div className="bg-white p-4 pt-4 pb-10 rounded-2xl shadow-2xl border border-slate-200 transform -rotate-2 hover:rotate-0 transition duration-300">
+                <div className="w-full h-60 bg-slate-900 rounded-xl overflow-hidden relative">
                   <img
                     src={couplePhotos.photo1}
                     alt="Foto 1"
@@ -562,19 +521,18 @@ Dengan Cinta Abadi,
                     }}
                   />
                   <div className="hidden absolute inset-0 bg-slate-900 flex-col items-center justify-center text-slate-400 text-xs p-4 text-center">
-                    <Camera className="w-10 h-10 mb-2 text-rose-400" />
-                    <span>Upload file <b>photo1.jpg</b> ke folder public/</span>
+                    <Camera className="w-8 h-8 mb-2 text-rose-400" />
+                    <span>Upload <b>photo1.jpg</b> ke folder public/</span>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
-                  <h4 className="font-bold text-slate-800 text-base">{partnerNames.partner1}</h4>
+                  <h4 className="font-bold text-slate-800 text-sm">{partnerNames.partner1}</h4>
                   <p className="text-xs text-slate-500 mt-0.5">"Momen indah yang selalu bikin tersenyum."</p>
                 </div>
               </div>
 
-              {/* Foto 2 Card */}
-              <div className="bg-white p-4 pt-4 pb-10 rounded-2xl shadow-2xl border border-slate-200 transform rotate-2 hover:rotate-0 transition duration-300 font-sans">
-                <div className="w-full h-64 bg-slate-900 rounded-xl overflow-hidden relative">
+              <div className="bg-white p-4 pt-4 pb-10 rounded-2xl shadow-2xl border border-slate-200 transform rotate-2 hover:rotate-0 transition duration-300">
+                <div className="w-full h-60 bg-slate-900 rounded-xl overflow-hidden relative">
                   <img
                     src={couplePhotos.photo2}
                     alt="Foto 2"
@@ -585,12 +543,12 @@ Dengan Cinta Abadi,
                     }}
                   />
                   <div className="hidden absolute inset-0 bg-slate-900 flex-col items-center justify-center text-slate-400 text-xs p-4 text-center">
-                    <Camera className="w-10 h-10 mb-2 text-pink-400" />
-                    <span>Upload file <b>photo2.jpg</b> ke folder public/</span>
+                    <Camera className="w-8 h-8 mb-2 text-pink-400" />
+                    <span>Upload <b>photo2.jpg</b> ke folder public/</span>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
-                  <h4 className="font-bold text-slate-800 text-base">{partnerNames.partner2}</h4>
+                  <h4 className="font-bold text-slate-800 text-sm">{partnerNames.partner2}</h4>
                   <p className="text-xs text-slate-500 mt-0.5">"Wajah favorit yang selalu aku rindukan."</p>
                 </div>
               </div>
@@ -598,25 +556,25 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 3. PIRINGAN PUISI BOTANI ================= */}
+        {/* ================= 3. PIRINGAN PUISI ================= */}
         {activeTab === 'wheel' && (
-          <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto">
-            <div className="bg-slate-900/70 border border-amber-900/40 p-8 rounded-3xl text-center backdrop-blur-xl shadow-2xl relative">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-500 to-rose-600 flex items-center justify-center mx-auto mb-4 shadow-lg animate-spin-slow">
-                <Disc className="w-8 h-8 text-slate-950" />
+          <div className="space-y-8 animate-fadeIn max-w-2xl mx-auto">
+            <div className="bg-slate-900/70 border border-rose-900/40 p-8 rounded-[2.5rem] text-center backdrop-blur-xl shadow-2xl relative">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-rose-600 flex items-center justify-center mx-auto mb-4 shadow-lg animate-spin-slow">
+                <Disc className="w-7 h-7 text-slate-950" />
               </div>
 
-              <h2 className="text-2xl font-bold text-slate-100 font-serif">Piringan Puisi Romance</h2>
-              <p className="text-slate-400 text-xs mt-1 font-sans">Putar piringan puisi untuk membaca bait kata-kata cinta tersirat!</p>
+              <h2 className="text-2xl font-bold text-slate-100 font-serif">Piringan Puisi Cinta</h2>
+              <p className="text-slate-400 text-xs mt-1 font-sans">Putar piringan puisi untuk membaca bait kata-kata tersirat!</p>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 font-sans">
+              <div className="grid grid-cols-2 gap-3 mt-6 font-sans">
                 {poemList.map((poem, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedPoem(poem)}
-                    className={`p-3.5 rounded-2xl border text-xs font-bold transition ${
+                    className={`p-3 rounded-2xl border text-xs font-bold transition ${
                       selectedPoem.title === poem.title
-                        ? 'bg-amber-600 text-white border-amber-500 shadow-lg'
+                        ? 'bg-rose-600 text-white border-rose-500 shadow-lg'
                         : 'bg-slate-950/60 text-slate-400 border-slate-800 hover:border-slate-700'
                     }`}
                   >
@@ -625,11 +583,11 @@ Dengan Cinta Abadi,
                 ))}
               </div>
 
-              <div className="mt-8 bg-slate-950/90 border border-amber-900/40 rounded-3xl p-8 max-w-xl mx-auto text-center shadow-inner">
-                <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800/40 font-sans">
+              <div className="mt-6 bg-slate-950/90 border border-rose-900/40 rounded-3xl p-6 text-center shadow-inner">
+                <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800/40 font-sans">
                   {selectedPoem.title}
                 </span>
-                <p className="text-amber-100 text-base md:text-lg italic mt-6 leading-relaxed font-serif">
+                <p className="text-rose-100 text-base italic mt-4 leading-relaxed font-serif">
                   "{selectedPoem.text}"
                 </p>
               </div>
@@ -637,13 +595,13 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 4. CATATAN TEMPEL APRESIASI ================= */}
+        {/* ================= 4. CATATAN TEMPEL ================= */}
         {activeTab === 'notes' && (
-          <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto font-sans">
-            <div className="bg-slate-900/60 border border-slate-800 p-6 md:p-8 rounded-3xl backdrop-blur-md">
-              <div className="text-center max-w-md mx-auto mb-8">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto mb-3">
-                  <Feather className="w-7 h-7" />
+          <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto font-sans">
+            <div className="bg-slate-900/60 border border-slate-800 p-6 md:p-8 rounded-[2.5rem] backdrop-blur-md">
+              <div className="text-center max-w-md mx-auto mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto mb-2">
+                  <Feather className="w-6 h-6" />
                 </div>
                 <h2 className="text-2xl font-bold text-slate-100 font-serif">Catatan Tempel Apresiasi</h2>
                 <p className="text-slate-400 text-xs mt-1">Tempelkan ucapan pujian & rasa terima kasih harian di sini.</p>
@@ -655,7 +613,7 @@ Dengan Cinta Abadi,
                 setGratitudeNotes([{ id: Date.now(), text: newNoteText.trim(), author: partnerNames.partner1, date: 'Baru Saja' }, ...gratitudeNotes]);
                 setNewNoteText('');
                 showToast("✨ Catatan Apresiasi Berhasil Ditempel!");
-              }} className="flex gap-3 mb-8">
+              }} className="flex gap-3 mb-6">
                 <input
                   type="text"
                   required
@@ -686,9 +644,9 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 5. KUPON CINTA ================= */}
+        {/* ================= 5. KUPON CINTA TIKET ORGANIK ================= */}
         {activeTab === 'coupons' && (
-          <div className="space-y-8 animate-fadeIn font-sans">
+          <div className="space-y-8 animate-fadeIn font-sans max-w-4xl mx-auto">
             <div className="text-center max-w-md mx-auto">
               <h2 className="text-2xl font-bold text-slate-100 font-serif">Kupon Spesial Pasangan</h2>
               <p className="text-slate-400 text-xs mt-1">Tukarkan kupon ini untuk klaim hadiah spesialmu!</p>
@@ -696,12 +654,17 @@ Dengan Cinta Abadi,
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {coupons.map((c) => (
-                <div key={c.id} className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between">
+                <div key={c.id} className="relative bg-slate-900/80 border border-rose-900/40 rounded-[2rem] p-6 flex flex-col justify-between overflow-hidden shadow-xl">
+                  {/* Scalloped Scratches cutouts */}
+                  <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-950 border-r border-rose-900/40" />
+                  <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-950 border-l border-rose-900/40" />
+
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-amber-400 bg-amber-950 px-2.5 py-1 rounded-full border border-amber-800">{c.tag}</span>
-                    <h4 className="font-bold text-slate-100 text-lg mt-3">{c.title}</h4>
-                    <p className="text-slate-400 text-xs mt-2 leading-relaxed">{c.desc}</p>
+                    <span className="text-[10px] uppercase font-bold text-rose-300 bg-rose-950 px-2.5 py-1 rounded-full border border-rose-800">{c.tag}</span>
+                    <h4 className="font-bold text-slate-100 text-base mt-3">{c.title}</h4>
+                    <p className="text-slate-400 text-xs mt-1.5 leading-relaxed">{c.desc}</p>
                   </div>
+
                   <button
                     disabled={c.status !== 'Available'}
                     onClick={() => {
@@ -709,7 +672,7 @@ Dengan Cinta Abadi,
                       showToast("🎉 Kupon Berhasil Ditukarkan!");
                     }}
                     className={`w-full py-3 rounded-2xl font-bold text-xs mt-6 transition ${
-                      c.status === 'Available' ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                      c.status === 'Available' ? 'bg-rose-600 hover:bg-rose-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'
                     }`}
                   >
                     {c.status === 'Available' ? 'Tukarkan Kupon' : 'Sudah Terpakai ✓'}
@@ -720,17 +683,17 @@ Dengan Cinta Abadi,
           </div>
         )}
 
-        {/* ================= 6. AMPLOP SURAT RAHASIA (PIN) ================= */}
+        {/* ================= 6. AMPLOP SURAT RAHASIA PIN ================= */}
         {activeTab === 'secret' && (
-          <div className="space-y-8 animate-fadeIn max-w-xl mx-auto font-sans">
+          <div className="space-y-8 animate-fadeIn max-w-lg mx-auto font-sans">
             {!isUnlocked ? (
-              <div className="bg-slate-900/80 border border-amber-900/40 rounded-3xl p-8 backdrop-blur-xl text-center shadow-2xl space-y-6">
-                <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto animate-bounce">
-                  <Mail className="w-8 h-8" />
+              <div className="bg-slate-900/80 border border-rose-900/40 rounded-[2.5rem] p-8 backdrop-blur-xl text-center shadow-2xl space-y-6">
+                <div className="w-14 h-14 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto animate-bounce">
+                  <Mail className="w-7 h-7" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-slate-100 font-serif">Amplop Surat Rahasia</h2>
-                  <p className="text-xs text-slate-400 mt-1">Masukkan 4-angka PIN rahasia untuk membuka amplop (PIN: 1234)</p>
+                  <p className="text-xs text-slate-400 mt-1">Masukkan 4-angka PIN rahasia (PIN Default: 1234)</p>
                 </div>
 
                 <div className="flex justify-center gap-4 my-4">
@@ -738,7 +701,7 @@ Dengan Cinta Abadi,
                     <div
                       key={idx}
                       className={`w-4 h-4 rounded-full border-2 transition-all ${
-                        inputPin.length > idx ? 'bg-amber-500 border-amber-500 scale-125' : 'border-slate-700 bg-slate-950'
+                        inputPin.length > idx ? 'bg-rose-500 border-rose-500 scale-125' : 'border-slate-700 bg-slate-950'
                       }`}
                     />
                   ))}
@@ -755,7 +718,7 @@ Dengan Cinta Abadi,
                         else if (btn === 'Delete') setInputPin(prev => prev.slice(0, -1));
                         else handleKeypadPress(String(btn));
                       }}
-                      className="py-3.5 bg-slate-950 hover:bg-slate-800 text-slate-200 font-bold text-base rounded-2xl border border-slate-800 transition active:scale-95"
+                      className="py-3 bg-slate-950 hover:bg-slate-800 text-slate-200 font-bold text-base rounded-2xl border border-slate-800 transition active:scale-95"
                     >
                       {btn}
                     </button>
@@ -763,9 +726,9 @@ Dengan Cinta Abadi,
                 </div>
               </div>
             ) : (
-              <div className="bg-slate-950/90 border border-amber-900/40 rounded-3xl p-8 backdrop-blur-xl shadow-2xl space-y-6">
+              <div className="bg-slate-950/90 border border-rose-900/40 rounded-[2.5rem] p-8 backdrop-blur-xl shadow-2xl space-y-6">
                 <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-                  <div className="flex items-center gap-2 text-amber-300 font-bold text-sm">
+                  <div className="flex items-center gap-2 text-rose-300 font-bold text-sm">
                     <Unlock className="w-5 h-5 text-emerald-400" /> Surat Rahasia Terbuka
                   </div>
                   <button onClick={() => setIsUnlocked(false)} className="text-slate-500 hover:text-slate-300">
@@ -773,7 +736,7 @@ Dengan Cinta Abadi,
                   </button>
                 </div>
 
-                <div className="prose text-amber-100 leading-relaxed text-sm whitespace-pre-line bg-slate-900/60 p-6 rounded-2xl border border-amber-900/20 font-serif">
+                <div className="prose text-rose-100 leading-relaxed text-sm whitespace-pre-line bg-slate-900/60 p-6 rounded-2xl border border-rose-900/20 font-serif">
                   {displayedText}
                 </div>
               </div>
@@ -783,13 +746,13 @@ Dengan Cinta Abadi,
 
       </main>
 
-      {/* Settings Modal (Termasuk Setting URL Foto 1 & Foto 2) */}
+      {/* Settings Modal */}
       {showSettings && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 font-sans">
           <div className="bg-slate-900 rounded-3xl p-6 max-w-md w-full border border-slate-800 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
               <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-amber-400" /> Pengaturan Scrapbook
+                <Sliders className="w-5 h-5 text-rose-400" /> Pengaturan Web Bucin
               </h3>
               <button onClick={() => setShowSettings(false)} className="text-slate-400 hover:text-slate-200">
                 <X className="w-5 h-5" />
@@ -816,7 +779,7 @@ Dengan Cinta Abadi,
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-400">URL / Path Foto 1 & Foto 2</label>
+                <label className="text-xs font-bold text-slate-400">Path File Foto 1 & 2</label>
                 <div className="space-y-2 mt-1">
                   <input
                     type="text"
@@ -863,11 +826,11 @@ Dengan Cinta Abadi,
                   setSecretPasscode(editPin);
                   const updatedPhotos = { photo1: editPhoto1, photo2: editPhoto2 };
                   setCouplePhotos(updatedPhotos);
-                  if (typeof window !== 'undefined') localStorage.setItem('scrapbook_photos', JSON.stringify(updatedPhotos));
+                  if (typeof window !== 'undefined') localStorage.setItem('organic_photos', JSON.stringify(updatedPhotos));
                   setShowSettings(false);
-                  showToast("✨ Pengaturan Scrapbook Disimpan!");
+                  showToast("✨ Pengaturan Disimpan!");
                 }}
-                className="w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl mt-4 shadow-lg"
+                className="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl mt-4 shadow-lg"
               >
                 Simpan Perubahan
               </button>
@@ -876,8 +839,8 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* Mobile Floating Bottom Bar */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 bg-slate-900/90 backdrop-blur-xl border border-amber-900/40 rounded-full p-2 shadow-2xl flex items-center justify-around font-sans">
+      {/* ================= BARU: FLOATING BLOSSOM DOCK (BUKAN BAR KAKU BAWAH) ================= */}
+      <div className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 backdrop-blur-xl border border-rose-900/40 rounded-full p-1.5 px-3 shadow-2xl flex items-center gap-1 font-sans">
         {[
           { id: 'journal', icon: BookOpen },
           { id: 'photos', icon: Camera },
@@ -892,11 +855,11 @@ Dengan Cinta Abadi,
             <button
               key={item.id}
               onClick={() => handleTabChange(item.id)}
-              className={`p-2.5 rounded-full transition ${
-                isActive ? 'bg-amber-600 text-white shadow-lg' : 'text-slate-400'
+              className={`p-2.5 rounded-full transition-all relative ${
+                isActive ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-900/50 scale-110' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <IconComp className="w-5 h-5" />
+              <IconComp className="w-4 h-4" />
             </button>
           );
         })}
