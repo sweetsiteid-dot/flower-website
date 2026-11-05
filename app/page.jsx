@@ -42,7 +42,7 @@ function OrganicCanvas() {
         sparks.push({
           x: e.clientX,
           y: e.clientY,
-          vx: (Math.random() - 0.5) * 3 shadow,
+          vx: (Math.random() - 0.5) * 3,
           vy: (Math.random() - 0.5) * 3,
           size: Math.random() * 4 + 2,
           opacity: 1,
@@ -328,7 +328,7 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* ================= BARU: FLOATING CREST HEADER (BUKAN BAR KAKU ATAS) ================= */}
+      {/* FLOATING CREST HEADER */}
       <header className="max-w-xl mx-auto px-4 mb-8">
         <div className="bg-slate-900/60 border border-rose-900/40 rounded-full p-2 px-6 backdrop-blur-xl shadow-2xl flex items-center justify-between font-sans">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleTabChange('journal')}>
@@ -437,14 +437,13 @@ Dengan Cinta Abadi,
               </div>
             </div>
 
-            {/* ORGANIC TIMER PODS (TIDAK KAKU KOTAK LAGI) */}
+            {/* ORGANIC TIMER PODS */}
             <div className="bg-slate-900/60 border border-rose-900/30 rounded-[2.5rem] p-8 backdrop-blur-xl text-center shadow-2xl font-sans relative">
               <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-rose-950 text-rose-300 text-xs font-bold mb-6">
                 <Clock className="w-4 h-4 text-rose-400" />
                 <span>Timer Perjalanan Cinta</span>
               </div>
 
-              {/* Timer berbentuk Lingkaran Kelopak Soft */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
                 {[
                   { label: 'Hari', val: timeTogether.days },
@@ -655,7 +654,6 @@ Dengan Cinta Abadi,
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {coupons.map((c) => (
                 <div key={c.id} className="relative bg-slate-900/80 border border-rose-900/40 rounded-[2rem] p-6 flex flex-col justify-between overflow-hidden shadow-xl">
-                  {/* Scalloped Scratches cutouts */}
                   <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-950 border-r border-rose-900/40" />
                   <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-950 border-l border-rose-900/40" />
 
@@ -839,7 +837,7 @@ Dengan Cinta Abadi,
         </div>
       )}
 
-      {/* ================= BARU: FLOATING BLOSSOM DOCK (BUKAN BAR KAKU BAWAH) ================= */}
+      {/* FLOATING BLOSSOM DOCK */}
       <div className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 backdrop-blur-xl border border-rose-900/40 rounded-full p-1.5 px-3 shadow-2xl flex items-center gap-1 font-sans">
         {[
           { id: 'journal', icon: BookOpen },
